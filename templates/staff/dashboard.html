@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Faculty Dashboard | CIET</title>
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
+
     <script>
         tailwind.config = {
             theme: {
@@ -41,258 +41,261 @@
 </head>
 <body class="text-slate-900 custom-scrollbar">
 
-    <nav class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl border-b border-slate-200/60 px-4 py-3">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <div class="bg-blue-600 h-9 w-9 rounded-xl flex items-center justify-center text-white font-black shadow-lg shadow-blue-200">C</div>
-                <div class="leading-none">
-                    <h1 class="font-bold text-slate-900 text-sm sm:text-base">CIET <span class="text-blue-600 font-black">Portal</span></h1>
-                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-tight hidden sm:block">Faculty Dashboard</p>
+<nav class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl border-b border-slate-200/60 px-4 py-3">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <div class="bg-blue-600 h-9 w-9 rounded-xl flex items-center justify-center text-white font-black shadow-lg shadow-blue-200">C</div>
+            <div class="leading-none">
+                <h1 class="font-bold text-slate-900 text-sm sm:text-base">CIET <span class="text-blue-600 font-black">Portal</span></h1>
+                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-tight hidden sm:block">Faculty Dashboard</p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2 sm:gap-4">
+            <div class="hidden sm:flex flex-col items-end">
+                <span id="nav-name" class="text-xs font-bold text-slate-700">Loading...</span>
+                <span id="nav-dept" class="text-[9px] text-blue-500 font-black uppercase tracking-widest">DEPT</span>
+            </div>
+            <div id="nav-avatar" class="h-9 w-9 bg-blue-50 rounded-xl border border-blue-100 flex items-center justify-center font-bold text-blue-600 text-sm italic">?</div>
+            <button onclick="logout()" class="p-2 text-slate-400 hover:text-red-500 transition-colors">
+                <i class="fas fa-power-off"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<main class="pt-24 pb-12 px-4 max-w-7xl mx-auto w-full">
+
+    <div class="mesh-gradient rounded-[2.5rem] p-8 sm:p-12 text-white shadow-2xl shadow-blue-900/20 mb-10 relative overflow-hidden">
+        <div class="relative z-10 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8">
+            <div class="space-y-4">
+                <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-1.5 rounded-full border border-white/20 text-[10px] font-bold uppercase tracking-widest">
+                    <i class="fas fa-clock"></i> <span id="live-clock">00:00:00</span>
+                </div>
+                <h1 class="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
+                    <span id="greeting">Hello</span>, <br>
+                    <span id="welcome-name" class="text-blue-200">Faculty</span>!
+                </h1>
+            </div>
+
+            <div class="flex gap-4 w-full lg:w-auto">
+                <div class="flex-1 lg:w-32 bg-white/10 backdrop-blur-xl border border-white/20 p-5 rounded-3xl text-center">
+                    <span id="stats-active" class="block text-3xl font-black">0</span>
+                    <span class="text-[10px] text-blue-100 uppercase font-black tracking-widest">Live Events</span>
+                </div>
+                <div class="flex-1 lg:w-32 bg-white/10 backdrop-blur-xl border border-white/20 p-5 rounded-3xl text-center">
+                    <span id="stats-registrations" class="block text-3xl font-black">0</span>
+                    <span class="text-[10px] text-blue-100 uppercase font-black tracking-widest">Total Students</span>
                 </div>
             </div>
-
-            <div class="flex items-center gap-2 sm:gap-4">
-                <div class="hidden sm:flex flex-col items-end">
-                    <span id="nav-name" class="text-xs font-bold text-slate-700">Loading...</span>
-                    <span id="nav-dept" class="text-[9px] text-blue-500 font-black uppercase tracking-widest">DEPT</span>
-                </div>
-                <div id="nav-avatar" class="h-9 w-9 bg-blue-50 rounded-xl border border-blue-100 flex items-center justify-center font-bold text-blue-600 text-sm italic">?</div>
-                <button onclick="logout()" class="p-2 text-slate-400 hover:text-red-500 transition-colors">
-                    <i class="fas fa-power-off"></i>
-                </button>
-            </div>
-        </div>
-    </nav>
-
-    <main class="pt-24 pb-12 px-4 max-w-7xl mx-auto w-full">
-        
-        <div class="mesh-gradient rounded-[2.5rem] p-8 sm:p-12 text-white shadow-2xl shadow-blue-900/20 mb-10 relative overflow-hidden">
-            <div class="relative z-10 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8">
-                <div class="space-y-4">
-                    <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-1.5 rounded-full border border-white/20 text-[10px] font-bold uppercase tracking-widest">
-                        <i class="fas fa-clock"></i> <span id="live-clock">00:00:00</span>
-                    </div>
-                    <h1 class="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
-                        <span id="greeting">Hello</span>, <br> 
-                        <span id="welcome-name" class="text-blue-200">Faculty</span>!
-                    </h1>
-                </div>
-
-                <div class="flex gap-4 w-full lg:w-auto">
-                    <div class="flex-1 lg:w-32 bg-white/10 backdrop-blur-xl border border-white/20 p-5 rounded-3xl text-center">
-                        <span id="stats-active" class="block text-3xl font-black">0</span>
-                        <span class="text-[10px] text-blue-100 uppercase font-black tracking-widest">Live Events</span>
-                    </div>
-                    <div class="flex-1 lg:w-32 bg-white/10 backdrop-blur-xl border border-white/20 p-5 rounded-3xl text-center">
-                        <span id="stats-registrations" class="block text-3xl font-black">0</span>
-                        <span class="text-[10px] text-blue-100 uppercase font-black tracking-widest">Total Students</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="mt-8">
-                <a href="/staff/create-event" class="inline-flex items-center gap-3 bg-white text-blue-700 px-8 py-4 rounded-2xl font-black text-sm hover:scale-105 transition-transform shadow-xl">
-                    <i class="fas fa-plus-circle"></i> Create New Event
-                </a>
-            </div>
         </div>
 
-        <div class="flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4 mb-10">
-            <div class="relative group flex-grow max-w-md">
-                <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                <input type="text" id="eventSearch" oninput="handleSearch(this.value)" placeholder="Find an event..." 
-                    class="w-full pl-12 pr-4 py-4 bg-white border border-slate-200 rounded-2xl focus:ring-4 focus:ring-blue-500/5 focus:border-blue-500 outline-none transition-all shadow-sm">
-            </div>
-            
-            <div id="filter-group" class="flex p-1.5 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-x-auto no-scrollbar">
-                <button onclick="filterByCategory('All', this)" class="filter-btn px-6 py-2.5 rounded-xl bg-slate-900 text-white text-xs font-black transition-all whitespace-nowrap">All</button>
-                <button onclick="filterByCategory('Workshop', this)" class="filter-btn px-6 py-2.5 rounded-xl text-slate-500 text-xs font-black hover:bg-slate-50 transition-all whitespace-nowrap">Workshops</button>
-                <button onclick="filterByCategory('Symposium', this)" class="filter-btn px-6 py-2.5 rounded-xl text-slate-500 text-xs font-black hover:bg-slate-50 transition-all whitespace-nowrap">Symposiums</button>
-            </div>
-        </div>
-
-        <div class="flex items-center gap-3 mb-8">
-            <div class="h-6 w-1.5 bg-blue-600 rounded-full"></div>
-            <h2 class="text-xl font-black text-slate-800">Ongoing Engagements</h2>
-        </div>
-
-        <div id="active-events-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            <div class="bg-white rounded-[2rem] p-4 border border-slate-200 shadow-sm"><div class="w-full h-48 skeleton rounded-2xl mb-4"></div><div class="h-6 w-3/4 skeleton rounded-lg mb-2"></div></div>
-            <div class="bg-white rounded-[2rem] p-4 border border-slate-200 shadow-sm"><div class="w-full h-48 skeleton rounded-2xl mb-4"></div><div class="h-6 w-3/4 skeleton rounded-lg mb-2"></div></div>
-        </div>
-
-        <div class="mt-20 flex items-center gap-3 mb-8">
-            <div class="h-6 w-1.5 bg-slate-300 rounded-full"></div>
-            <h2 class="text-xl font-black text-slate-400">Completed Archives</h2>
-        </div>
-        <div id="past-events-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
-
-    </main>
-
-    <div id="qr-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md hidden items-center justify-center z-[100] p-4">
-        <div class="bg-white p-8 rounded-[2.5rem] shadow-2xl max-w-sm w-full text-center relative animate-in fade-in zoom-in duration-300">
-            <button onclick="closeQrModal()" class="absolute -top-3 -right-3 w-10 h-10 bg-white border border-slate-100 rounded-full text-slate-400 hover:text-red-500 shadow-lg transition-colors"><i class="fas fa-times"></i></button>
-            <h3 class="font-black text-xl text-slate-900 mb-1">Registration Link</h3>
-            <p id="qr-event-title" class="font-bold text-blue-600 text-sm mb-6 px-4 truncate"></p>
-            <div class="bg-slate-50 p-4 border-2 border-dashed border-slate-200 rounded-[2rem] mb-6">
-                <img id="qr-image" src="" alt="QR Code" class="w-48 h-48 mx-auto mix-blend-multiply">
-            </div>
-            <button onclick="downloadQr()" class="w-full bg-slate-900 text-white py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-600 transition-colors">Download QR Code</button>
+        <div class="mt-8">
+            <a href="/staff/create-event" class="inline-flex items-center gap-3 bg-white text-blue-700 px-8 py-4 rounded-2xl font-black text-sm hover:scale-105 transition-transform shadow-xl">
+                <i class="fas fa-plus-circle"></i> Create New Event
+            </a>
         </div>
     </div>
 
+    <div class="flex flex-col md:flex-row justify-between items-stretch md:items-center gap-4 mb-10">
+        <div class="relative group flex-grow max-w-md">
+            <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+            <input type="text" id="eventSearch" oninput="handleSearch(this.value)" placeholder="Find an event..."
+                   class="w-full pl-12 pr-4 py-4 bg-white border border-slate-200 rounded-2xl focus:ring-4 focus:ring-blue-500/5 focus:border-blue-500 outline-none transition-all shadow-sm">
+        </div>
 
-    <script>
-        let allEvents = [];
-        let currentFilter = 'All';
-        let searchQuery = '';
+        <div id="filter-group" class="flex p-1.5 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-x-auto no-scrollbar">
+            <button onclick="filterByCategory('All', this)" class="filter-btn px-6 py-2.5 rounded-xl bg-slate-900 text-white text-xs font-black transition-all whitespace-nowrap">All</button>
+            <button onclick="filterByCategory('Workshop', this)" class="filter-btn px-6 py-2.5 rounded-xl text-slate-500 text-xs font-black hover:bg-slate-50 transition-all whitespace-nowrap">Workshops</button>
+            <button onclick="filterByCategory('Symposium', this)" class="filter-btn px-6 py-2.5 rounded-xl text-slate-500 text-xs font-black hover:bg-slate-50 transition-all whitespace-nowrap">Symposiums</button>
+        </div>
+    </div>
 
-        function updateLiveClock() {
-            const now = new Date();
-            document.getElementById('live-clock').textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            const hrs = now.getHours();
-            document.getElementById('greeting').textContent = hrs < 12 ? "Good Morning" : hrs < 17 ? "Good Afternoon" : "Good Evening";
+    <div class="flex items-center gap-3 mb-8">
+        <div class="h-6 w-1.5 bg-blue-600 rounded-full"></div>
+        <h2 class="text-xl font-black text-slate-800">Ongoing Engagements</h2>
+    </div>
+
+    <div id="active-events-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        <div class="bg-white rounded-[2rem] p-4 border border-slate-200 shadow-sm"><div class="w-full h-48 skeleton rounded-2xl mb-4"></div><div class="h-6 w-3/4 skeleton rounded-lg mb-2"></div></div>
+        <div class="bg-white rounded-[2rem] p-4 border border-slate-200 shadow-sm"><div class="w-full h-48 skeleton rounded-2xl mb-4"></div><div class="h-6 w-3/4 skeleton rounded-lg mb-2"></div></div>
+    </div>
+
+    <div class="mt-20 flex items-center gap-3 mb-8">
+        <div class="h-6 w-1.5 bg-slate-300 rounded-full"></div>
+        <h2 class="text-xl font-black text-slate-400">Completed Archives</h2>
+    </div>
+    <div id="past-events-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+
+</main>
+
+<div id="qr-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md hidden items-center justify-center z-[100] p-4">
+    <div class="bg-white p-8 rounded-[2.5rem] shadow-2xl max-w-sm w-full text-center relative animate-in fade-in zoom-in duration-300">
+        <button onclick="closeQrModal()" class="absolute -top-3 -right-3 w-10 h-10 bg-white border border-slate-100 rounded-full text-slate-400 hover:text-red-500 shadow-lg transition-colors"><i class="fas fa-times"></i></button>
+        <h3 class="font-black text-xl text-slate-900 mb-1">Registration Link</h3>
+        <p id="qr-event-title" class="font-bold text-blue-600 text-sm mb-6 px-4 truncate"></p>
+        <div class="bg-slate-50 p-4 border-2 border-dashed border-slate-200 rounded-[2rem] mb-6">
+            <img id="qr-image" src="" alt="QR Code" class="w-48 h-48 mx-auto mix-blend-multiply">
+        </div>
+        <button onclick="downloadQr()" class="w-full bg-slate-900 text-white py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-600 transition-colors">Download QR Code</button>
+    </div>
+</div>
+
+
+<script>
+    let allEvents = [];
+    let currentFilter = 'All';
+    let searchQuery = '';
+
+    function updateLiveClock() {
+        const now = new Date();
+        document.getElementById('live-clock').textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        const hrs = now.getHours();
+        document.getElementById('greeting').textContent = hrs < 12 ? "Good Morning" : hrs < 17 ? "Good Afternoon" : "Good Evening";
+    }
+    setInterval(updateLiveClock, 1000);
+    updateLiveClock();
+
+    async function loadDashboard() {
+        try {
+            const res = await fetch('/api/staff/dashboard-data');
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error);
+
+            allEvents = data.events || [];
+
+            // Update Profile Data
+            document.getElementById('nav-name').textContent = data.profile.name;
+            document.getElementById('welcome-name').textContent = data.profile.name.split(' ')[0];
+            document.getElementById('nav-dept').textContent = data.profile.dept;
+            document.getElementById('nav-avatar').textContent = data.profile.name.charAt(0);
+
+            refreshDisplay();
+        } catch (err) {
+            console.error("Fetch error:", err);
+            document.getElementById('active-events-grid').innerHTML = `<div class="col-span-full text-center py-20 text-slate-400 font-bold bg-white rounded-3xl border border-dashed border-slate-200">Failed to connect to Database.</div>`;
         }
-        setInterval(updateLiveClock, 1000);
-        updateLiveClock();
+    }
 
-        async function loadDashboard() {
-            try {
-                const res = await fetch('/api/staff/dashboard-data');
-                const data = await res.json();
-                if (!res.ok) throw new Error(data.error);
+    function refreshDisplay() {
+        const filtered = allEvents.filter(e => {
+            const matchesSearch = e.title.toLowerCase().includes(searchQuery.toLowerCase()) || e.category.toLowerCase().includes(searchQuery.toLowerCase());
+            const matchesTab = currentFilter === 'All' || e.category === currentFilter;
+            return matchesSearch && matchesTab;
+        });
 
-                allEvents = data.events || [];
-                
-                // Update Profile Data
-                document.getElementById('nav-name').textContent = data.profile.name;
-                document.getElementById('welcome-name').textContent = data.profile.name.split(' ')[0];
-                document.getElementById('nav-dept').textContent = data.profile.dept;
-                document.getElementById('nav-avatar').textContent = data.profile.name.charAt(0);
+        const active = filtered.filter(e => e.is_active);
+        const past = filtered.filter(e => !e.is_active);
 
-                refreshDisplay();
-            } catch (err) {
-                console.error("Fetch error:", err);
-                document.getElementById('active-events-grid').innerHTML = `<div class="col-span-full text-center py-20 text-slate-400 font-bold bg-white rounded-3xl border border-dashed border-slate-200">Failed to connect to Database.</div>`;
-            }
+        // UPDATED: Use registrations_count instead of registrations.length
+        const totalRegs = allEvents.reduce((acc, curr) => acc + (curr.registrations_count || 0), 0);
+
+        document.getElementById('stats-active').textContent = active.length;
+        document.getElementById('stats-registrations').textContent = totalRegs;
+
+        renderActive(active);
+        renderPast(past);
+    }
+
+    function renderActive(events) {
+        const grid = document.getElementById('active-events-grid');
+        if (events.length === 0) {
+            grid.innerHTML = `<div class="col-span-full text-center py-16 text-slate-400">No active events found for "${currentFilter}".</div>`;
+            return;
         }
 
-        function refreshDisplay() {
-            const filtered = allEvents.filter(e => {
-                const matchesSearch = e.title.toLowerCase().includes(searchQuery.toLowerCase()) || e.category.toLowerCase().includes(searchQuery.toLowerCase());
-                const matchesTab = currentFilter === 'All' || e.category === currentFilter;
-                return matchesSearch && matchesTab;
-            });
+        grid.innerHTML = events.map(e => {
+            // UPDATED: Use registrations_count here too
+            const regs = e.registrations_count || 0;
 
-            const active = filtered.filter(e => e.is_active);
-            const past = filtered.filter(e => !e.is_active);
+            const max = e.max_capacity || 100;
+            const progress = Math.min((regs / max) * 100, 100);
 
-            // Total Registration Logic
-            const totalRegs = allEvents.reduce((acc, curr) => acc + (curr.registrations?.length || 0), 0);
-            document.getElementById('stats-active').textContent = active.length;
-            document.getElementById('stats-registrations').textContent = totalRegs;
+            return `
+            <div class="bg-white rounded-[2.5rem] border border-slate-200 overflow-hidden hover:shadow-2xl transition-all duration-500 group">
+                <div class="h-44 relative">
+                    <img src="${e.image ? '/static/uploads/'+e.image : 'https://images.unsplash.com/photo-1540575861501-7ad0582371f3?q=80&w=800'}" class="w-full h-full object-cover">
+                    <div class="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1.5 rounded-xl text-[10px] font-black uppercase text-blue-600 border border-white shadow-sm">${e.category}</div>
+                </div>
+                <div class="p-6">
+                    <h3 class="font-black text-lg text-slate-800 mb-4 line-clamp-1">${e.title}</h3>
 
-            renderActive(active);
-            renderPast(past);
-        }
-
-        function renderActive(events) {
-            const grid = document.getElementById('active-events-grid');
-            if (events.length === 0) {
-                grid.innerHTML = `<div class="col-span-full text-center py-16 text-slate-400">No active events found for "${currentFilter}".</div>`;
-                return;
-            }
-
-            grid.innerHTML = events.map(e => {
-                const regs = e.registrations?.length || 0;
-                const max = e.max_capacity || 100;
-                const progress = Math.min((regs / max) * 100, 100);
-
-                return `
-                <div class="bg-white rounded-[2.5rem] border border-slate-200 overflow-hidden hover:shadow-2xl transition-all duration-500 group">
-                    <div class="h-44 relative">
-                        <img src="${e.image ? '/static/uploads/'+e.image : 'https://images.unsplash.com/photo-1540575861501-7ad0582371f3?q=80&w=800'}" class="w-full h-full object-cover">
-                        <div class="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1.5 rounded-xl text-[10px] font-black uppercase text-blue-600 border border-white shadow-sm">${e.category}</div>
+                    <div class="mb-6 space-y-2">
+                        <div class="flex justify-between text-[10px] font-black uppercase tracking-tighter">
+                            <span class="text-slate-400">Capacity: ${regs}/${max}</span>
+                            <span class="text-blue-600">${Math.round(progress)}% Filled</span>
+                        </div>
+                        <div class="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                            <div class="h-full bg-blue-600 transition-all duration-1000 ease-out" style="width: ${progress}%"></div>
+                        </div>
                     </div>
-                    <div class="p-6">
-                        <h3 class="font-black text-lg text-slate-800 mb-4 line-clamp-1">${e.title}</h3>
-                        
-                        <div class="mb-6 space-y-2">
-                            <div class="flex justify-between text-[10px] font-black uppercase tracking-tighter">
-                                <span class="text-slate-400">Capacity: ${regs}/${max}</span>
-                                <span class="text-blue-600">${Math.round(progress)}% Filled</span>
-                            </div>
-                            <div class="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
-                                <div class="h-full bg-blue-600 transition-all duration-1000 ease-out" style="width: ${progress}%"></div>
-                            </div>
-                        </div>
 
-                        <div class="flex items-center gap-4 text-[11px] font-bold text-slate-500 mb-6">
-                            <span><i class="far fa-calendar-alt text-blue-500 mr-1.5"></i> ${formatDate(e.date)}</span>
-                            <span><i class="fas fa-location-dot text-red-500 mr-1.5"></i> ${e.venue || 'TBA'}</span>
-                        </div>
-
-                        <div class="flex gap-2">
-                            <a href="/staff/registrations/${e._id}" class="flex-grow bg-slate-900 text-white text-[10px] font-black py-4 rounded-xl text-center hover:bg-blue-600 transition-colors uppercase tracking-widest">Dashboard</a>
-                            <button onclick="showQr('${e._id}', '${e.title}')" class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-100 transition-colors"><i class="fas fa-qrcode"></i></button>
-                            <button onclick="deleteEvent('${e._id}')" class="w-12 h-12 bg-red-50 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all"><i class="fas fa-trash-can"></i></button>
-                        </div>
+                    <div class="flex items-center gap-4 text-[11px] font-bold text-slate-500 mb-6">
+                        <span><i class="far fa-calendar-alt text-blue-500 mr-1.5"></i> ${formatDate(e.date)}</span>
+                        <span><i class="fas fa-location-dot text-red-500 mr-1.5"></i> ${e.venue || 'TBA'}</span>
                     </div>
-                </div>`;
-            }).join('');
-        }
 
-        function renderPast(events) {
-            const grid = document.getElementById('past-events-grid');
-            if(events.length === 0) {
-                grid.innerHTML = '<p class="col-span-full text-center text-slate-400 text-sm py-4 italic">No archived records found.</p>';
-                return;
-            }
-            grid.innerHTML = events.map(e => `
-                <div class="bg-white p-6 rounded-3xl border border-slate-200 hover:border-blue-200 transition-colors group">
-                    <span class="text-[10px] font-black text-slate-300 uppercase tracking-widest group-hover:text-blue-400">${formatDate(e.date)}</span>
-                    <h4 class="font-bold text-slate-700 text-sm mt-1 mb-4 truncate">${e.title}</h4>
                     <div class="flex gap-2">
-                        <a href="/staff/registrations/${e._id}" class="flex-1 text-[9px] font-black bg-slate-50 text-slate-500 py-3 rounded-xl text-center hover:bg-slate-900 hover:text-white transition-all">REPORTS</a>
-                        <button class="flex-1 text-[9px] font-black bg-blue-50 text-blue-600 py-3 rounded-xl hover:bg-blue-600 hover:text-white transition-all">CERTIFICATES</button>
+                        <a href="/staff/registrations/${e._id}" class="flex-grow bg-slate-900 text-white text-[10px] font-black py-4 rounded-xl text-center hover:bg-blue-600 transition-colors uppercase tracking-widest">Dashboard</a>
+                        <button onclick="showQr('${e._id}', '${e.title}')" class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-100 transition-colors"><i class="fas fa-qrcode"></i></button>
+                        <button onclick="deleteEvent('${e._id}')" class="w-12 h-12 bg-red-50 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all"><i class="fas fa-trash-can"></i></button>
                     </div>
                 </div>
-            `).join('');
+            </div>`;
+        }).join('');
+    }
+
+    function renderPast(events) {
+        const grid = document.getElementById('past-events-grid');
+        if(events.length === 0) {
+            grid.innerHTML = '<p class="col-span-full text-center text-slate-400 text-sm py-4 italic">No archived records found.</p>';
+            return;
         }
+        grid.innerHTML = events.map(e => `
+            <div class="bg-white p-6 rounded-3xl border border-slate-200 hover:border-blue-200 transition-colors group">
+                <span class="text-[10px] font-black text-slate-300 uppercase tracking-widest group-hover:text-blue-400">${formatDate(e.date)}</span>
+                <h4 class="font-bold text-slate-700 text-sm mt-1 mb-4 truncate">${e.title}</h4>
+                <div class="flex gap-2">
+                    <a href="/staff/registrations/${e._id}" class="flex-1 text-[9px] font-black bg-slate-50 text-slate-500 py-3 rounded-xl text-center hover:bg-slate-900 hover:text-white transition-all">REPORTS</a>
+                    <button class="flex-1 text-[9px] font-black bg-blue-50 text-blue-600 py-3 rounded-xl hover:bg-blue-600 hover:text-white transition-all">CERTIFICATES</button>
+                </div>
+            </div>
+        `).join('');
+    }
 
-        // Logic Helpers
-        function filterByCategory(cat, btn) {
-            currentFilter = cat;
-            document.querySelectorAll('.filter-btn').forEach(b => b.className = 'filter-btn px-6 py-2.5 rounded-xl text-slate-500 text-xs font-black hover:bg-slate-50 transition-all whitespace-nowrap');
-            btn.className = 'filter-btn px-6 py-2.5 rounded-xl bg-slate-900 text-white text-xs font-black transition-all whitespace-nowrap';
-            refreshDisplay();
-        }
+    // Logic Helpers
+    function filterByCategory(cat, btn) {
+        currentFilter = cat;
+        document.querySelectorAll('.filter-btn').forEach(b => b.className = 'filter-btn px-6 py-2.5 rounded-xl text-slate-500 text-xs font-black hover:bg-slate-50 transition-all whitespace-nowrap');
+        btn.className = 'filter-btn px-6 py-2.5 rounded-xl bg-slate-900 text-white text-xs font-black transition-all whitespace-nowrap';
+        refreshDisplay();
+    }
 
-        function handleSearch(val) { searchQuery = val; refreshDisplay(); }
-        function formatDate(d) { return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); }
+    function handleSearch(val) { searchQuery = val; refreshDisplay(); }
+    function formatDate(d) { return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); }
 
-        function showQr(id, title) {
-            const link = `${window.location.origin}/event/register?id=${id}`;
-            document.getElementById('qr-image').src = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(link)}`;
-            document.getElementById('qr-event-title').textContent = title;
-            document.getElementById('qr-modal').classList.remove('hidden');
-            document.getElementById('qr-modal').classList.add('flex');
-        }
+    function showQr(id, title) {
+        const link = `${window.location.origin}/event/register?id=${id}`;
+        document.getElementById('qr-image').src = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(link)}`;
+        document.getElementById('qr-event-title').textContent = title;
+        document.getElementById('qr-modal').classList.remove('hidden');
+        document.getElementById('qr-modal').classList.add('flex');
+    }
 
-        function closeQrModal() {
-            document.getElementById('qr-modal').classList.add('hidden');
-            document.getElementById('qr-modal').classList.remove('flex');
-        }
+    function closeQrModal() {
+        document.getElementById('qr-modal').classList.add('hidden');
+        document.getElementById('qr-modal').classList.remove('flex');
+    }
 
-        async function deleteEvent(id) {
-            if(!confirm("Warning: This will permanently delete all registration data for this event. Continue?")) return;
-            const res = await fetch(`/api/events/delete/${id}`, { method: 'DELETE' });
-            if(res.ok) loadDashboard();
-        }
+    async function deleteEvent(id) {
+        if(!confirm("Warning: This will permanently delete all registration data for this event. Continue?")) return;
+        const res = await fetch(`/api/events/delete/${id}`, { method: 'DELETE' });
+        if(res.ok) loadDashboard();
+    }
 
-        function logout() { fetch('/api/auth/logout').then(() => window.location.href = '/auth/login'); }
+    function logout() { fetch('/api/auth/logout').then(() => window.location.href = '/auth/login'); }
 
-        loadDashboard();
-    </script>
+    loadDashboard();
+</script>
 </body>
 </html>

@@ -259,6 +259,36 @@
                                     <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Testimonial Message</label>
                                     <textarea name="alum_message" rows="3" class="alum-input w-full bg-slate-50 dark:bg-dark-900/50 border border-slate-200 dark:border-dark-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-purple-500 outline-none resize-none" placeholder="Share your thoughts..."></textarea>
                                 </div>
+                                <div class="mb-4">
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                        Willing to contribute to Alumni Fund?
+                                    </label>
+
+                                    <select name="alum_contribution" id="alum_contribution" onchange="toggleDonationMessage()"
+                                            class="w-full px-4 py-2 border border-gray-300 rounded-lg outline-none transition
+                   focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+                   bg-white text-gray-900
+                   dark:bg-slate-700 dark:border-slate-600 dark:text-white dark:focus:ring-blue-400">
+                                        <option value="No" class="dark:bg-slate-700">No</option>
+                                        <option value="Yes" class="dark:bg-slate-700">Yes</option>
+                                    </select>
+                                </div>
+
+                                <div id="donation-msg" class="hidden mb-4 p-4 rounded-lg flex items-start gap-3 border transition-colors
+                            bg-green-50 border-green-200 text-green-800
+                            dark:bg-green-900/30 dark:border-green-800 dark:text-green-300">
+                                    <i class="fas fa-hand-holding-heart mt-1 text-green-600 dark:text-green-400"></i>
+                                    <div>
+                                        <p class="font-bold text-sm">Thank you for your willingness!</p>
+                                        <p class="text-xs mt-1">
+                                            Please contact <strong>Dr. N.R. Deepa</strong> for further details.<br>
+                                            <i class="fas fa-phone-alt text-xs mr-1"></i>
+                                            <a href="tel:+919944958547" class="underline hover:text-green-900 dark:hover:text-green-100 font-medium">
+                                                +91 9944958547
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -495,6 +525,15 @@
                 alert("Network error occurred.");
             }
         });
+        function toggleDonationMessage() {
+        const val = document.getElementById('alum_contribution').value;
+        const msg = document.getElementById('donation-msg');
+        if(val === 'Yes') {
+            msg.classList.remove('hidden');
+        } else {
+            msg.classList.add('hidden');
+        }
+    }
 
         // Init
         toggleRequired('.alum-input', false); // Start in Student mode

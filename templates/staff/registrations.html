@@ -177,7 +177,7 @@
                         phone: p.phone,
                         email: p.email || '-',
                         team_display: reg.type === 'team' ? reg.team_name : (reg.type === 'alumni' ? 'Alumni' : 'Individual'),
-                        
+                        willing_to_donate: p.contribution || 'No',
                         // PHOTO HANDLING
                         photo_filename: p.photo || null
                     });
@@ -284,13 +284,14 @@
 
         // CSV Header
         let csvContent = "data:text/csv;charset=utf-8,";
-        csvContent += "Name,RegNo/Batch,Details,Phone,Email,Type,Photo Link\n"; // Added Photo Link
+        csvContent += "Name,RegNo/Batch,Details,Phone,Email,Type,Donor?,Photo Link\n"; // Added Photo Link
 
         dataToExport.forEach(row => {
             const name = `"${row.name}"`;
             const id = `"${row.identifier}"`; 
             const det = `"${row.details}"`; 
             const type = `"${row.team_display}"`;
+            const donor = `"${row.willing_to_donate}"`;
             
             // Generate Photo Link
             let photoLink = "N/A";
@@ -298,7 +299,7 @@
                 photoLink = `${BASE_URL}/static/uploads/${row.photo_filename}`;
             }
             
-            csvContent += `${name},${id},${det},${row.phone},${row.email},${type},${photoLink}\n`;
+            csvContent += `${name},${id},${det},${row.phone},${row.email},${type},${donor},${photoLink}\n`;
         });
 
         const encodedUri = encodeURI(csvContent);

@@ -169,18 +169,29 @@ def get_dashboard_data():
     # 2. Get Events created by THIS staff
     raw_events = list(events_col.find({"created_by": current_username}).sort("date", 1))
     
-    # 3. Process Events (ObjectId -> String, Check Active)
+    # 3. Process Events
     clean_events = []
     today = datetime.now().strftime('%Y-%m-%d')
-    
+
     for e in raw_events:
+        event_id = str(e['_id'])
+
+        # --- NEW CODE: Count the registrations for this event ---
+        # Assuming your collection is named 'registrations_col'
+        reg_count = registrations_col.count_documents({"event_id": event_id})
+        # --------------------------------------------------------
+
         clean_events.append({
-            "_id": str(e['_id']),
+            "_id": event_id,
             "title": e['title'],
             "date": e['date'],
             "category": e.get('category', 'General'),
             "image": e.get('image'),
-            "is_active": (e['date'] >= today)
+            "is_active": (e['date'] >= today),
+            "max_capacity": int(e.get('max_capacity', 100)), # Ensure this exists
+
+            # Send the count to the frontend
+            "registrations_count": reg_count
         })
 
     return jsonify({
@@ -292,6 +303,7 @@ def register_student():
                 "designation": request.form.get('alum_designation'),
                 "mobile": request.form.get('alum_mobile'),
                 "email": request.form.get('alum_email'),
+                "contribution": request.form.get('alum_contribution'),
                 "photo": filename,
                 "type": "alumni",
                 "date": datetime.now()
@@ -354,6 +366,7 @@ def get_event_registrations(event_id):
                     "year": "Alumni",               # Hardcoded for display
                     "company": a.get('company'),    # New Field
                     "designation": a.get('designation'), # New Field
+                    "contribution": a.get('contribution', 'No'),
                     "phone": a.get('mobile'),
                     "email": a.get('email'),
                     "photo": a.get('photo')
