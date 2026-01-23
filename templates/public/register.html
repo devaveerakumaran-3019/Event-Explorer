@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Registration | CIET Events</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+                    colors: {
+                        brand: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8' },
+                        dark: { 950: '#070a13', 900: '#0B0F19', 800: '#111827', 700: '#1F2937' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .dark .glass-panel {
+            background: rgba(11, 15, 25, 0.85);
+        }
+        
+        .ticket-edge { position: relative; }
+        @media (min-width: 1024px) {
+            .ticket-edge::after {
+                content: '';
+                position: absolute;
+                right: -10px; top: 20px; bottom: 20px; width: 20px;
+                background-image: radial-gradient(circle, #f8fafc 10px, transparent 10px);
+                background-size: 20px 40px;
+                z-index: 20;
+            }
+            .dark .ticket-edge::after { background-image: radial-gradient(circle, #0B0F19 10px, transparent 10px); }
+        }
+
+        .input-focus-effect:focus {
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+            border-color: #3b82f6;
+        }
+
+        .progress-bar { transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .member-card { animation: slideIn 0.4s ease-out forwards; }
+        @keyframes slideIn {
+            from { opacity: 0; transform: scale(0.95) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .hidden { display: none; }
+    </style>
+</head>
+
+<body class="bg-slate-50 text-slate-900 dark:bg-dark-950 dark:text-slate-100 min-h-screen transition-colors duration-300">
+
+    <div class="fixed top-0 left-0 w-full h-1.5 bg-slate-200 dark:bg-dark-800 z-[60]">
+        <div id="reg-progress" class="progress-bar h-full bg-brand-600 w-0 shadow-[0_0_10px_#2563eb]"></div>
+    </div>
+
+    <nav class="absolute top-0 w-full z-50 p-6 flex justify-between max-w-7xl mx-auto left-0 right-0">
+        <a href="/" class="group flex items-center gap-2 px-4 py-2 bg-white/90 dark:bg-dark-800/90 backdrop-blur rounded-full shadow-sm hover:shadow-brand-500/20 transition-all border border-slate-200 dark:border-dark-700">
+            <i class="fas fa-chevron-left text-brand-600 group-hover:-translate-x-1 transition-transform"></i>
+            <span class="font-bold text-sm">Cancel</span>
+        </a>
+        <button id="theme-toggle" class="w-10 h-10 rounded-full bg-white/90 dark:bg-dark-800/90 shadow-sm flex items-center justify-center border border-slate-200 dark:border-dark-700 hover:scale-110 transition-transform">
+            <i class="fas fa-sun hidden dark:block text-yellow-500"></i>
+            <i class="fas fa-moon block dark:hidden text-slate-600"></i>
+        </button>
+    </nav>
+
+    <main class="min-h-screen flex items-center justify-center p-4 py-28 relative overflow-hidden">
+        <div class="absolute inset-0 pointer-events-none">
+            <div class="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] bg-brand-500/10 rounded-full blur-[120px]"></div>
+            <div class="absolute bottom-[-10%] right-[-5%] w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[120px]"></div>
+        </div>
+
+        <div class="glass-panel w-full max-w-6xl rounded-[2.5rem] shadow-2xl border border-white/50 dark:border-dark-700/50 overflow-hidden flex flex-col lg:flex-row relative z-10">
+            
+            <div class="lg:w-80 bg-slate-900 ticket-edge relative p-8 text-white flex flex-col justify-between">
+                <img id="event-bg" src="" class="absolute inset-0 w-full h-full object-cover opacity-30">
+                <div class="absolute inset-0 bg-gradient-to-b from-brand-600/20 via-slate-900/80 to-slate-900"></div>
+                
+                <div class="relative z-10">
+                    <div class="flex items-center gap-2 mb-6">
+                        <div class="w-8 h-8 bg-brand-600 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-ticket-alt text-xs"></i>
+                        </div>
+                        <span class="text-xs font-black uppercase tracking-[0.2em]">CIET Events</span>
+                    </div>
+
+                    <h1 id="event-title" class="text-2xl font-extrabold leading-tight mb-4">Loading...</h1>
+                    
+                    <div class="space-y-4 pt-6 border-t border-white/10">
+                        <div class="flex items-start gap-3">
+                            <i class="far fa-calendar-check mt-1 text-brand-400"></i>
+                            <div>
+                                <p class="text-[10px] uppercase text-slate-400 font-bold">Date</p>
+                                <p id="event-date" class="text-sm font-medium">--</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <i class="fas fa-map-pin mt-1 text-brand-400"></i>
+                            <div>
+                                <p class="text-[10px] uppercase text-slate-400 font-bold">Venue</p>
+                                <p id="event-venue" class="text-sm font-medium">--</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex-1 p-6 md:p-12 lg:p-16 overflow-y-auto max-h-[85vh] custom-scrollbar">
+                
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
+                    <div>
+                        <h2 class="text-3xl font-extrabold tracking-tight">Registration</h2>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Select your category below.</p>
+                    </div>
+                    
+                    <div class="bg-slate-100 dark:bg-dark-800 p-1.5 rounded-2xl inline-flex items-center border border-slate-200 dark:border-dark-700 shadow-inner overflow-x-auto max-w-full">
+                        <button onclick="setMode('individual')" id="btn-ind" class="px-5 py-2 rounded-xl text-xs font-bold transition-all duration-300 bg-white dark:bg-dark-700 shadow-md text-brand-600 whitespace-nowrap">
+                            <i class="fas fa-user mr-2"></i>Student
+                        </button>
+                        <button onclick="setMode('team')" id="btn-team" class="px-5 py-2 rounded-xl text-xs font-bold transition-all duration-300 text-slate-500 hover:text-brand-600 whitespace-nowrap">
+                            <i class="fas fa-users mr-2"></i>Team
+                        </button>
+                        <button onclick="setMode('alumni')" id="btn-alum" class="px-5 py-2 rounded-xl text-xs font-bold transition-all duration-300 text-slate-500 hover:text-brand-600 whitespace-nowrap">
+                            <i class="fas fa-graduation-cap mr-2"></i>Alumni
+                        </button>
+                    </div>
+                </div>
+
+                <form id="register-form" class="space-y-8" enctype="multipart/form-data">
+                    <input type="hidden" id="event_id" name="event_id">
+                    <input type="hidden" id="reg_type" name="reg_type" value="individual">
+
+                    <div id="team-name-group" class="hidden animate-fadeIn space-y-2">
+                        <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest ml-1">Team Name</label>
+                        <input type="text" name="team_name" class="w-full bg-slate-50 dark:bg-dark-800/50 border border-slate-200 dark:border-dark-700 rounded-2xl px-5 py-4 focus:ring-4 focus:ring-brand-500/10 input-focus-effect outline-none transition-all font-semibold" placeholder="Enter Team Name">
+                    </div>
+
+                    <div id="student-fields-container">
+                        <div class="group/card relative bg-white dark:bg-dark-800/40 p-6 md:p-8 rounded-[2rem] border border-slate-200 dark:border-dark-700 shadow-sm hover:shadow-md transition-all">
+                            <div class="flex items-center gap-3 mb-6">
+                                <div class="w-10 h-10 bg-brand-100 dark:bg-brand-900/30 rounded-xl flex items-center justify-center text-brand-600">
+                                    <i class="fas fa-user-circle text-xl"></i>
+                                </div>
+                                <h3 id="lead-label" class="text-lg font-bold">Participant Details</h3>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="space-y-1.5">
+                                    <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Full Name</label>
+                                    <input type="text" name="name_1" class="std-input w-full bg-slate-50 dark:bg-dark-900/50 border border-slate-200 dark:border-dark-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-brand-500 outline-none transition-all" placeholder="Name">
+                                </div>
+                                <div class="space-y-1.5">
+                                    <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Reg No</label>
+                                    <input type="text" name="reg_1" class="std-input w-full bg-slate-50 dark:bg-dark-900/50 border border-slate-200 dark:border-dark-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-brand-500 outline-none uppercase font-mono" placeholder="Register No">
+                                </div>
+                                <div class="space-y-1.5">
+                                    <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Department</label>
+                                    <select name="dept_1" class="std-input w-full bg-slate-50 dark:bg-dark-900/50 border border-slate-200 dark:border-dark-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-brand-500 outline-none">
+                                        <option value="" disabled selected>Select Dept</option>
+                                        <option>CSE</option><option>IT</option><option>ECE</option><option>EEE</option><option>MECH</option><option>CIVIL</option><option>AIDS</option><option>CSBS</option>
+                                    </select>
+                                </div>
+                                <div class="space-y-1.5">
+                                    <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Year</label>
+                                    <select name="year_1" class="std-input w-full bg-slate-50 dark:bg-dark-900/50 border border-slate-200 dark:border-dark-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-brand-500 outline-none">
+                                        <option value="" disabled selected>Select Year</option>
+                                        <option value="1">I Year</option><option value="2">II Year</option><option value="3">III Year</option><option value="4">IV Year</option>
+                                    </select>
+                                </div>
+                                <div class="space-y-1.5">
+                                    <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Email</label>
+                                    <input type="email" name="email_1" class="std-input w-full bg-slate-50 dark:bg-dark-900/50 border border-slate-200 dark:border-dark-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Email">
+                                </div>
+                                <div class="space-y-1.5">
+                                    <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Mobile</label>
+                                    <input type="tel" name="phone_1" class="std-input w-full bg-slate-50 dark:bg-dark-900/50 border border-slate-200 dark:border-dark-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-brand-500 outline-none" placeholder="Mobile">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="team-members-container" class="space-y-6 mt-6"></div>
+
+                        <button type="button" id="add-member-btn" class="hidden w-full mt-6 py-4 border-2 border-dashed border-slate-300 dark:border-dark-700 rounded-2xl text-slate-500 hover:border-brand-500 hover:text-brand-600 hover:bg-brand-50 dark:hover:bg-brand-900/10 transition-all font-bold group" onclick="addMember()">
+                            <i class="fas fa-plus-circle mr-2 group-hover:scale-125 transition-transform"></i>
+                            Add Team Member
+                        </button>
+                    </div>
+
+                    <div id="alumni-fields-container" class="hidden animate-slideIn">
+                        <div class="group/card relative bg-white dark:bg-dark-800/40 p-6 md:p-8 rounded-[2rem] border border-slate-200 dark:border-dark-700 shadow-sm hover:shadow-md transition-all">
+                            
+                            <div class="flex items-center gap-3 mb-6">
+                                <div class="w-10 h-10 bg-purple-100 dark:bg-purple-900/30 rounded-xl flex items-center justify-center text-purple-600">
+                                    <i class="fas fa-graduation-cap text-xl"></i>
+                                </div>
+                                <h3 class="text-lg font-bold">Alumni Details</h3>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="space-y-1.5">
+                                    <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Name with Initial</label>
+                                    <input type="text" name="alum_name" class="alum-input w-full bg-slate-50 dark:bg-dark-900/50 border border-slate-200 dark:border-dark-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-purple-500 outline-none" placeholder="e.g. John Doe K">
+                                </div>
+                                <div class="space-y-1.5">
+                                    <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Batch</label>
+                                    <input type="text" name="alum_batch" class="alum-input w-full bg-slate-50 dark:bg-dark-900/50 border border-slate-200 dark:border-dark-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-purple-500 outline-none" placeholder="e.g. 2018-2022">
+                                </div>
+                                <div class="space-y-1.5">
+                                    <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Department</label>
+                                    <select name="alum_dept" class="alum-input w-full bg-slate-50 dark:bg-dark-900/50 border border-slate-200 dark:border-dark-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-purple-500 outline-none">
+                                        <option value="" disabled selected>Select Dept</option>
+                                        <option>CSE</option><option>IT</option><option>ECE</option><option>EEE</option><option>MECH</option><option>CIVIL</option><option>AIDS</option>
+                                    </select>
+                                </div>
+                                <div class="space-y-1.5">
+                                    <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Company Name</label>
+                                    <input type="text" name="alum_company" class="alum-input w-full bg-slate-50 dark:bg-dark-900/50 border border-slate-200 dark:border-dark-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-purple-500 outline-none" placeholder="Current Company">
+                                </div>
+                                <div class="space-y-1.5">
+                                    <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Designation</label>
+                                    <input type="text" name="alum_designation" class="alum-input w-full bg-slate-50 dark:bg-dark-900/50 border border-slate-200 dark:border-dark-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-purple-500 outline-none" placeholder="Job Title">
+                                </div>
+                                <div class="space-y-1.5">
+                                    <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Mobile Number</label>
+                                    <input type="tel" name="alum_mobile" class="alum-input w-full bg-slate-50 dark:bg-dark-900/50 border border-slate-200 dark:border-dark-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-purple-500 outline-none" placeholder="Mobile">
+                                </div>
+                                <div class="space-y-1.5 md:col-span-2">
+                                    <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Email ID</label>
+                                    <input type="email" name="alum_email" class="alum-input w-full bg-slate-50 dark:bg-dark-900/50 border border-slate-200 dark:border-dark-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-purple-500 outline-none" placeholder="Email Address">
+                                </div>
+                                <div class="space-y-1.5 md:col-span-2">
+                                    <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Communication Address</label>
+                                    <textarea name="alum_address" rows="2" class="alum-input w-full bg-slate-50 dark:bg-dark-900/50 border border-slate-200 dark:border-dark-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-purple-500 outline-none resize-none" placeholder="Full Address"></textarea>
+                                </div>
+                                <div class="space-y-1.5 md:col-span-2">
+                                    <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Upload Photo</label>
+                                    <div class="relative w-full border border-dashed border-slate-300 dark:border-dark-600 rounded-xl bg-slate-50 dark:bg-dark-900/30 hover:bg-slate-100 transition-colors p-4 text-center">
+                                        <input type="file" name="alum_photo" accept="image/*" class="alum-input absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                                        <div class="text-sm text-slate-500"><i class="fas fa-cloud-upload-alt mr-2"></i>Click to upload photo</div>
+                                    </div>
+                                </div>
+                                <div class="space-y-1.5 md:col-span-2">
+                                    <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-1">Testimonial Message</label>
+                                    <textarea name="alum_message" rows="3" class="alum-input w-full bg-slate-50 dark:bg-dark-900/50 border border-slate-200 dark:border-dark-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-purple-500 outline-none resize-none" placeholder="Share your thoughts..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="pt-6">
+                        <button type="submit" id="submit-btn" class="w-full py-5 bg-brand-600 hover:bg-brand-700 text-white rounded-2xl font-black text-lg shadow-xl shadow-brand-500/30 transition-all hover:-translate-y-1 active:scale-[0.98] flex items-center justify-center gap-3">
+                            <span>Confirm Registration</span>
+                            <i id="btn-icon" class="fas fa-paper-plane text-sm"></i>
+                            <i id="btn-spinner" class="fas fa-circle-notch fa-spin hidden"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <div id="success-modal" class="fixed inset-0 z-[100] flex items-center justify-center hidden bg-slate-900/90 backdrop-blur-md p-4">
+        <div class="bg-white dark:bg-dark-800 rounded-[3rem] p-10 max-w-md w-full text-center shadow-2xl scale-in border border-white/20">
+            <div class="w-20 h-20 bg-green-500 text-white rounded-3xl flex items-center justify-center mx-auto mb-6 text-3xl shadow-lg shadow-green-500/40">
+                <i class="fas fa-check"></i>
+            </div>
+            <h3 class="text-3xl font-black mb-2">You're In!</h3>
+            <p class="text-slate-500 dark:text-slate-400 mb-8">Registration successful. A confirmation has been sent.</p>
+            <a href="/" class="block w-full py-4 rounded-2xl bg-slate-900 dark:bg-white dark:text-dark-900 text-white font-black hover:opacity-90 transition-opacity">
+                Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // --- THEME & PROGRESS ---
+        const themeToggle = document.getElementById('theme-toggle');
+        if(localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        }
+        themeToggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+        });
+
+        const form = document.getElementById('register-form');
+        const progressBar = document.getElementById('reg-progress');
+        form.addEventListener('input', () => {
+            // Check visible inputs only for progress
+            const inputs = form.querySelectorAll('input:not(.hidden), select:not(.hidden), textarea:not(.hidden)');
+            let filled = 0, total = 0;
+            inputs.forEach(i => {
+                if(i.offsetParent !== null && i.required) { // Only check visible required fields
+                    total++;
+                    if(i.value) filled++;
+                }
+            });
+            const percent = total === 0 ? 0 : (filled / total) * 100;
+            progressBar.style.width = `${percent}%`;
+        });
+
+        // --- LOAD EVENT DATA ---
+        const urlParams = new URLSearchParams(window.location.search);
+        const eventId = urlParams.get('id');
+        if(!eventId) { window.location.href='/'; }
+        document.getElementById('event_id').value = eventId;
+
+        fetch('/api/events')
+            .then(res => res.json())
+            .then(data => {
+                const event = data.find(e => e.id == eventId || e._id == eventId);
+                if(event) {
+                    document.getElementById('event-title').innerText = event.title;
+                    document.getElementById('event-date').innerText = new Date(event.date).toLocaleDateString();
+                    document.getElementById('event-venue').innerText = event.venue;
+                    if(event.image) document.getElementById('event-bg').src = `/static/uploads/${event.image}`;
+                }
+            });
+
+        // --- MODE SWITCHING LOGIC ---
+        let memberCount = 1;
+        const maxMembers = 5;
+
+        function setMode(mode) {
+            const btnInd = document.getElementById('btn-ind');
+            const btnTeam = document.getElementById('btn-team');
+            const btnAlum = document.getElementById('btn-alum');
+            
+            const teamGroup = document.getElementById('team-name-group');
+            const studentContainer = document.getElementById('student-fields-container');
+            const alumniContainer = document.getElementById('alumni-fields-container');
+            const addBtn = document.getElementById('add-member-btn');
+            const leadLabel = document.getElementById('lead-label');
+            const typeInput = document.getElementById('reg_type');
+
+            // Reset Styles
+            const activeClass = "bg-white dark:bg-dark-700 shadow-md text-brand-600";
+            const inactiveClass = "text-slate-500 hover:text-brand-600";
+            
+            btnInd.className = `px-5 py-2 rounded-xl text-xs font-bold transition-all duration-300 whitespace-nowrap ${mode === 'individual' ? activeClass : inactiveClass}`;
+            btnTeam.className = `px-5 py-2 rounded-xl text-xs font-bold transition-all duration-300 whitespace-nowrap ${mode === 'team' ? activeClass : inactiveClass}`;
+            btnAlum.className = `px-5 py-2 rounded-xl text-xs font-bold transition-all duration-300 whitespace-nowrap ${mode === 'alumni' ? activeClass : inactiveClass}`;
+
+            typeInput.value = mode;
+
+            // Visibility Logic
+            if (mode === 'alumni') {
+                studentContainer.classList.add('hidden');
+                teamGroup.classList.add('hidden');
+                addBtn.classList.add('hidden');
+                alumniContainer.classList.remove('hidden');
+                
+                // Set required attributes for validation
+                toggleRequired('.alum-input', true);
+                toggleRequired('.std-input', false);
+            } else {
+                alumniContainer.classList.add('hidden');
+                studentContainer.classList.remove('hidden');
+                
+                toggleRequired('.alum-input', false);
+                toggleRequired('.std-input', true);
+
+                if (mode === 'team') {
+                    teamGroup.classList.remove('hidden');
+                    addBtn.classList.remove('hidden');
+                    leadLabel.innerText = "Team Leader Details";
+                    if(memberCount === 1) addMember();
+                } else {
+                    teamGroup.classList.add('hidden');
+                    addBtn.classList.add('hidden');
+                    document.getElementById('team-members-container').innerHTML = '';
+                    memberCount = 1;
+                    leadLabel.innerText = "Primary Participant";
+                }
+            }
+        }
+
+        function toggleRequired(selector, isRequired) {
+            document.querySelectorAll(selector).forEach(el => {
+                if(isRequired) el.setAttribute('required', '');
+                else el.removeAttribute('required');
+            });
+        }
+
+        function addMember() {
+            if (memberCount >= maxMembers) return;
+            memberCount++;
+            const container = document.getElementById('team-members-container');
+            const div = document.createElement('div');
+            div.className = "member-card relative bg-slate-50/50 dark:bg-dark-900/30 p-6 md:p-8 rounded-[2rem] border border-slate-200 dark:border-dark-700";
+            div.innerHTML = `
+                <div class="absolute -left-3 -top-3 w-10 h-10 bg-white dark:bg-dark-800 border border-slate-200 dark:border-dark-700 rounded-full flex items-center justify-center text-sm font-black shadow-lg text-brand-600">${memberCount}</div>
+                <button type="button" class="absolute top-6 right-6 text-slate-400 hover:text-red-500" onclick="removeMember(this)"><i class="fas fa-trash-alt"></i></button>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
+                    <input type="text" name="name_${memberCount}" placeholder="Name" required class="std-input w-full bg-white dark:bg-dark-900 border border-slate-200 dark:border-dark-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-brand-500 outline-none">
+                    <input type="text" name="reg_${memberCount}" placeholder="Reg No" required class="std-input w-full bg-white dark:bg-dark-900 border border-slate-200 dark:border-dark-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-brand-500 outline-none uppercase font-mono">
+                    <select name="dept_${memberCount}" required class="std-input w-full bg-white dark:bg-dark-900 border border-slate-200 dark:border-dark-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-brand-500 outline-none"><option value="" disabled selected>Dept</option><option>CSE</option><option>IT</option><option>ECE</option></select>
+                    <select name="year_${memberCount}" required class="std-input w-full bg-white dark:bg-dark-900 border border-slate-200 dark:border-dark-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-brand-500 outline-none"><option value="1">I</option><option value="2">II</option><option value="3">III</option><option value="4">IV</option></select>
+                </div>`;
+            container.appendChild(div);
+        }
+
+        function removeMember(btn) {
+            btn.parentElement.remove();
+            memberCount--;
+        }
+
+        // --- FORM SUBMIT ---
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submit-btn');
+            const spinner = document.getElementById('btn-spinner');
+            const icon = document.getElementById('btn-icon');
+            const type = document.getElementById('reg_type').value;
+            
+            btn.disabled = true;
+            icon.classList.add('hidden');
+            spinner.classList.remove('hidden');
+
+            try {
+                let options = {};
+
+                // DIFFERENT LOGIC FOR ALUMNI (Uses FormData for File Upload)
+                if (type === 'alumni') {
+                    const formData = new FormData(form);
+                    options = {
+                        method: 'POST',
+                        body: formData // No Content-Type header (browser sets multipart/form-data)
+                    };
+                } 
+                // LOGIC FOR STUDENT/TEAM (Uses JSON)
+                else {
+                    const formData = new FormData(form);
+                    const payload = {
+                        event_id: formData.get('event_id'),
+                        type: type,
+                        team_name: type === 'team' ? formData.get('team_name') : null,
+                        members: [{
+                            name: formData.get('name_1'), reg_no: formData.get('reg_1'),
+                            dept: formData.get('dept_1'), year: formData.get('year_1'),
+                            email: formData.get('email_1'), phone: formData.get('phone_1')
+                        }]
+                    };
+
+                    if (type === 'team') {
+                        const container = document.getElementById('team-members-container');
+                        [...container.children].forEach(row => {
+                            const inputs = row.querySelectorAll('input, select');
+                            const member = {};
+                            inputs.forEach(i => { member[i.name.split('_')[0] === 'reg' ? 'reg_no' : i.name.split('_')[0]] = i.value; });
+                            payload.members.push(member);
+                        });
+                    }
+
+                    options = {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    };
+                }
+
+                const response = await fetch('/api/register', options);
+                
+                if (response.ok) {
+                    confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#9333ea', '#2563eb'] });
+                    document.getElementById('success-modal').classList.remove('hidden');
+                } else {
+                    const errData = await response.json();
+                    alert("Error: " + (errData.error || "Registration failed"));
+                    btn.disabled = false;
+                    icon.classList.remove('hidden');
+                    spinner.classList.add('hidden');
+                }
+            } catch (err) {
+                console.error(err);
+                btn.disabled = false;
+                spinner.classList.add('hidden');
+                alert("Network error occurred.");
+            }
+        });
+
+        // Init
+        toggleRequired('.alum-input', false); // Start in Student mode
+    </script>
+</body>
+</html>

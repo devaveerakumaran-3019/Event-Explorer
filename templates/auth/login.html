@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Login | CIET Portal</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+                    colors: {
+                        brand: { 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8' },
+                        dark: { 900: '#0f172a', 800: '#1e293b', 700: '#334155' }
+                    },
+                    animation: {
+                        'blob': 'blob 10s infinite',
+                        'entrance': 'entrance 0.6s ease-out forwards'
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' }
+                        },
+                        entrance: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Tech Grid Background */
+        .bg-grid {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+        }
+        .dark .bg-grid {
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+        }
+
+        /* Glass Panel Refined */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+        }
+        .dark .glass-panel {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Blobs */
+        .glow-blob {
+            position: absolute; width: 500px; height: 500px; border-radius: 50%;
+            filter: blur(80px); opacity: 0.4; z-index: -1;
+        }
+        .dark .glow-blob { opacity: 0.2; filter: blur(100px); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-dark-900 dark:text-slate-100 min-h-screen flex flex-col items-center justify-center relative overflow-hidden transition-colors duration-300 font-sans selection:bg-brand-500 selection:text-white">
+
+    <div class="fixed inset-0 bg-grid pointer-events-none"></div>
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="glow-blob bg-blue-500 top-[-10%] left-[-10%] animate-blob"></div>
+        <div class="glow-blob bg-purple-500 bottom-[-10%] right-[-10%] animate-blob animation-delay-2000"></div>
+    </div>
+
+    <a href="/" class="absolute top-6 left-6 md:top-10 md:left-10 z-20 flex items-center gap-2 text-sm font-bold text-slate-500 dark:text-slate-400 hover:text-brand-600 dark:hover:text-white transition-colors group">
+        <div class="w-8 h-8 rounded-full bg-white dark:bg-dark-800 border border-slate-200 dark:border-dark-700 flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
+            <i class="fas fa-arrow-left text-xs"></i>
+        </div>
+        <span>Back to Home</span>
+    </a>
+
+    <button id="theme-toggle" class="absolute top-6 right-6 md:top-10 md:right-10 z-20 w-10 h-10 rounded-full bg-white dark:bg-dark-800 border border-slate-200 dark:border-dark-700 flex items-center justify-center shadow-sm text-slate-500 dark:text-slate-400 hover:text-brand-600 transition-all">
+        <i class="fas fa-sun text-amber-500 dark:hidden"></i>
+        <i class="fas fa-moon text-blue-400 hidden dark:block"></i>
+    </button>
+
+    <div class="glass-panel w-full max-w-[420px] p-8 md:p-10 rounded-3xl relative z-10 mx-4 animate-entrance">
+        
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-brand-600 to-indigo-600 text-white text-2xl font-bold shadow-lg shadow-brand-500/30 mb-5">
+                C
+            </div>
+            <h2 class="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Staff Portal</h2>
+            <p class="text-slate-500 dark:text-slate-400 text-sm mt-2">Welcome back. Please login to your account.</p>
+        </div>
+
+        <form id="loginForm" class="space-y-5">
+            
+            <div class="space-y-1.5">
+                <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Staff ID</label>
+                <div class="relative group">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <i class="fas fa-id-badge text-slate-400 group-focus-within:text-brand-500 transition-colors"></i>
+                    </div>
+                    <input type="text" id="username" placeholder="e.g. STF1023" required 
+                        class="w-full pl-11 pr-4 py-3.5 bg-slate-50/50 dark:bg-dark-800/50 border border-slate-200 dark:border-dark-700 rounded-xl outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600 font-medium text-slate-900 dark:text-white">
+                </div>
+            </div>
+
+            <div class="space-y-1.5">
+                <div class="flex justify-between items-center">
+                    <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Password</label>
+                    <a href="#" class="text-xs font-bold text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300 transition-colors">Forgot?</a>
+                </div>
+                <div class="relative group">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <i class="fas fa-lock text-slate-400 group-focus-within:text-brand-500 transition-colors"></i>
+                    </div>
+                    <input type="password" id="password" placeholder="••••••••" required 
+                        class="w-full pl-11 pr-12 py-3.5 bg-slate-50/50 dark:bg-dark-800/50 border border-slate-200 dark:border-dark-700 rounded-xl outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600 font-medium text-slate-900 dark:text-white">
+                    
+                    <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors cursor-pointer focus:outline-none">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div id="error-msg" class="hidden flex items-start gap-3 p-3 rounded-xl bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-xs font-medium border border-red-100 dark:border-red-800 animate-pulse">
+                <i class="fas fa-exclamation-circle mt-0.5"></i>
+                <span id="error-text">Invalid credentials. Please try again.</span>
+            </div>
+
+            <button type="submit" id="submitBtn" class="w-full py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold rounded-xl shadow-lg shadow-brand-500/10 hover:shadow-xl hover:bg-brand-600 dark:hover:bg-brand-500 dark:hover:text-white transition-all duration-300 hover:-translate-y-0.5 flex items-center justify-center gap-2 group">
+                <span>Secure Login</span>
+                <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform" id="btn-icon"></i>
+                <i id="btn-spinner" class="fas fa-spinner fa-spin hidden"></i>
+            </button>
+        </form>
+
+        <div class="mt-8 text-center pt-6 border-t border-slate-200 dark:border-slate-700/50">
+            <p class="text-sm text-slate-500 dark:text-slate-400">
+                Don't have an account? 
+                <a href="/auth/signup" class="font-bold text-slate-900 dark:text-white hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Go to signup page</a>
+            </p>
+        </div>
+    </div>
+
+    <footer class="absolute bottom-4 w-full text-center z-10 px-4">
+        <div class="flex flex-col md:flex-row justify-center items-center gap-1 md:gap-4 text-xs font-medium text-slate-400 dark:text-slate-500">
+            <span>&copy; 2026 CIET. All rights reserved.</span>
+            <span class="hidden md:inline text-slate-300 dark:text-slate-600">|</span>
+            <span>
+                Developed by 
+                <a href="https://deva-portfolio-app.netlify.app/" target="_blank" class="text-slate-600 dark:text-slate-300 font-bold hover:text-brand-600 dark:hover:text-brand-400 hover:underline transition-all">
+                    Deva Veera Kumaran
+                </a>
+            </span>
+        </div>
+    </footer>
+
+    <script>
+        // Dark Mode Logic
+        const htmlEl = document.documentElement;
+        const themeBtn = document.getElementById('theme-toggle');
+
+        function updateTheme() {
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                htmlEl.classList.add('dark');
+            } else {
+                htmlEl.classList.remove('dark');
+            }
+        }
+        updateTheme();
+
+        themeBtn.addEventListener('click', () => {
+            htmlEl.classList.toggle('dark');
+            localStorage.theme = htmlEl.classList.contains('dark') ? 'dark' : 'light';
+        });
+
+        // Password Toggle
+        const togglePassword = document.querySelector('#togglePassword');
+        const passwordInput = document.querySelector('#password');
+        const eyeIcon = togglePassword.querySelector('i');
+
+        togglePassword.addEventListener('click', function () {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            eyeIcon.classList.toggle('fa-eye');
+            eyeIcon.classList.toggle('fa-eye-slash');
+        });
+
+        // Login Logic
+        document.getElementById('loginForm').onsubmit = async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const spinner = document.getElementById('btn-spinner');
+            const btnIcon = document.getElementById('btn-icon');
+            const errorContainer = document.getElementById('error-msg');
+            const errorText = document.getElementById('error-text');
+            const btnText = submitBtn.querySelector('span');
+
+            // Loading State
+            submitBtn.disabled = true;
+            btnText.textContent = "Verifying...";
+            spinner.classList.remove('hidden');
+            btnIcon.classList.add('hidden');
+            errorContainer.classList.add('hidden');
+            submitBtn.classList.add('opacity-80', 'cursor-not-allowed');
+
+            try {
+                // API Call
+                const res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        username: document.getElementById('username').value,
+                        password: document.getElementById('password').value
+                    })
+                });
+                
+                const data = await res.json();
+
+                if(data.success) { 
+                    btnText.textContent = "Success! Redirecting...";
+                    spinner.classList.add('hidden');
+                    // Add success color
+                    submitBtn.classList.remove('bg-slate-900', 'dark:bg-white');
+                    submitBtn.classList.add('bg-green-600', 'text-white', 'border-transparent');
+                    
+                    setTimeout(() => {
+                        window.location.href = '/staff/dashboard'; 
+                    }, 800);
+                } else { 
+                    throw new Error(data.error || "Incorrect credentials");
+                }
+            } catch (err) {
+                // Reset State
+                submitBtn.disabled = false;
+                btnText.textContent = "Secure Login";
+                spinner.classList.add('hidden');
+                btnIcon.classList.remove('hidden');
+                submitBtn.classList.remove('opacity-80', 'cursor-not-allowed');
+                
+                // Show Error
+                errorText.textContent = err.message;
+                errorContainer.classList.remove('hidden');
+                
+                // Shake Animation
+                const card = document.querySelector('.glass-panel');
+                card.classList.add('animate-[bounce_0.5s]');
+                setTimeout(() => card.classList.remove('animate-[bounce_0.5s]'), 500);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Event | CIET Faculty Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: #f8fafc;
+            background-image: radial-gradient(at 0% 0%, hsla(221,83%,93%,1) 0, transparent 50%), 
+                              radial-gradient(at 100% 100%, hsla(263,90%,93%,1) 0, transparent 50%);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .input-group:focus-within label {
+            color: #2563eb;
+            transform: translateX(4px);
+        }
+
+        .input-field {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .input-field:focus {
+            background: white;
+            box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.1);
+        }
+
+        /* Hide Scrollbar for clean UI */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-0 sm:p-6 md:p-10">
+
+    <div class="bg-white w-full max-w-6xl sm:rounded-[3rem] shadow-[0_32px_64px_-15px_rgba(0,0,0,0.1)] overflow-hidden flex flex-col lg:flex-row min-h-[85vh]">
+        
+        <div class="bg-slate-900 lg:w-1/3 p-8 lg:p-12 text-white flex flex-col justify-between relative overflow-hidden">
+            <div class="absolute -top-20 -left-20 w-64 h-64 bg-blue-600/20 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-20 -right-20 w-64 h-64 bg-indigo-600/20 rounded-full blur-3xl"></div>
+            
+            <div class="relative z-10">
+                <a href="/staff/dashboard" class="inline-flex items-center text-blue-400 font-bold text-sm mb-12 hover:text-blue-300 transition-colors">
+                    <i class="fas fa-arrow-left mr-2"></i> Back to Dashboard
+                </a>
+                <div class="space-y-4">
+                    <div class="h-12 w-12 bg-blue-600 rounded-2xl flex items-center justify-center text-2xl shadow-lg shadow-blue-500/40">
+                        <i class="fas fa-calendar-plus"></i>
+                    </div>
+                    <h1 class="text-4xl font-black tracking-tight">Launch <br>Your Event</h1>
+                    <p class="text-slate-400 text-sm leading-relaxed max-w-xs">
+                        Fill in the details to broadcast your event to all students. High-quality banners increase engagement by 40%.
+                    </p>
+                </div>
+            </div>
+
+            <div class="relative z-10 mt-12 lg:mt-0">
+                <div class="bg-white/5 backdrop-blur-lg rounded-3xl p-6 border border-white/10">
+                    <h4 class="text-xs font-black uppercase tracking-widest text-blue-400 mb-4">Live Preview Hint</h4>
+                    <p class="text-xs text-slate-300 italic">"Events with specific capacities help the department manage resources better."</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex-1 p-8 lg:p-16 bg-slate-50/50 overflow-y-auto no-scrollbar">
+            <header class="flex justify-between items-start mb-12">
+                <div>
+                    <h2 class="text-3xl font-black text-slate-800">Event Details</h2>
+                    <p class="text-slate-500 font-medium">Create a new engagement opportunity</p>
+                </div>
+                <div class="hidden sm:block px-4 py-2 bg-blue-50 rounded-full text-blue-600 text-xs font-bold uppercase tracking-widest">
+                    Step 1 of 1
+                </div>
+            </header>
+
+            <form id="createForm" class="space-y-8">
+                
+                <div class="input-group">
+                    <label class="block text-xs font-black text-slate-400 uppercase mb-2 ml-1 transition-all">Event Headline</label>
+                    <div class="relative group">
+                        <input type="text" name="title" placeholder="e.g. National Cyber Security Workshop" 
+                            class="input-field w-full bg-white border border-slate-200 rounded-2xl px-6 py-4 outline-none focus:border-blue-500 font-bold text-slate-700 transition-all text-lg" required>
+                        <i class="fas fa-signature absolute right-6 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-blue-500 transition-colors"></i>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="input-group">
+                        <label class="block text-xs font-black text-slate-400 uppercase mb-2 ml-1">Date</label>
+                        <input type="date" name="date" class="input-field w-full bg-white border border-slate-200 rounded-2xl px-6 py-4 outline-none focus:border-blue-500 font-bold text-slate-700" required>
+                    </div>
+                    <div class="input-group">
+                        <label class="block text-xs font-black text-slate-400 uppercase mb-2 ml-1">Start Time</label>
+                        <input type="time" name="time" class="input-field w-full bg-white border border-slate-200 rounded-2xl px-6 py-4 outline-none focus:border-blue-500 font-bold text-slate-700" required>
+                    </div>
+                    <div class="input-group">
+                        <label class="block text-xs font-black text-slate-400 uppercase mb-2 ml-1">Max Capacity</label>
+                        <input type="number" name="max_capacity" placeholder="100" 
+                            class="input-field w-full bg-white border border-slate-200 rounded-2xl px-6 py-4 outline-none focus:border-blue-500 font-bold text-slate-700" required>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="input-group">
+                        <label class="block text-xs font-black text-slate-400 uppercase mb-2 ml-1">Venue / Location</label>
+                        <div class="relative group">
+                            <input type="text" name="venue" placeholder="e.g. Main Auditorium" 
+                                class="input-field w-full bg-white border border-slate-200 rounded-2xl px-6 py-4 outline-none focus:border-blue-500 font-bold text-slate-700" required>
+                            <i class="fas fa-map-pin absolute right-6 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-red-500 transition-colors"></i>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label class="block text-xs font-black text-slate-400 uppercase mb-2 ml-1">Category</label>
+                        <div class="relative group">
+                            <select name="category" class="input-field w-full bg-white border border-slate-200 rounded-2xl px-6 py-4 outline-none focus:border-blue-500 font-bold text-slate-700 appearance-none cursor-pointer">
+                                <option>Workshop</option>
+                                <option>Technical</option>
+                                <option>Non-Technical</option>
+                                <option>Cultural</option>
+                                <option>Others</option>
+                            </select>
+                            <i class="fas fa-chevron-down absolute right-6 top-1/2 -translate-y-1/2 text-slate-300 pointer-events-none"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="flex justify-between items-end mb-2 ml-1">
+                        <label class="text-xs font-black text-slate-400 uppercase">Event Description</label>
+                        <span id="charCount" class="text-[10px] font-bold text-slate-400">0 / 500</span>
+                    </div>
+                    <textarea name="description" id="descInput" rows="4" maxlength="500" placeholder="Describe the objectives and benefits of this event..." 
+                        class="input-field w-full bg-white border border-slate-200 rounded-2xl px-6 py-4 outline-none focus:border-blue-500 font-medium text-slate-600 resize-none"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-black text-slate-400 uppercase mb-2 ml-1">Event Banner Image</label>
+                    <label class="relative flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-slate-200 rounded-[2rem] cursor-pointer bg-white hover:bg-slate-50 hover:border-blue-400 transition-all overflow-hidden group">
+                        
+                        <img id="imagePreview" class="absolute inset-0 w-full h-full object-cover hidden transition-transform duration-500 group-hover:scale-110">
+                        
+                        <div id="uploadPlaceholder" class="flex flex-col items-center justify-center text-slate-400 group-hover:text-blue-600 transition-colors">
+                            <div class="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center text-2xl mb-3 group-hover:bg-blue-50 group-hover:scale-110 transition-all">
+                                <i class="fas fa-image"></i>
+                            </div>
+                            <p class="text-sm font-bold">Drop your image here or <span class="text-blue-600">Browse</span></p>
+                            <p class="text-[10px] uppercase font-bold tracking-tighter mt-1 opacity-60">PNG, JPG up to 5MB (16:9 recommended)</p>
+                        </div>
+                        
+                        <input type="file" name="image" id="imageInput" accept="image/*" class="hidden">
+                    </label>
+                </div>
+
+                <button type="submit" id="submitBtn" class="w-full bg-slate-900 text-white py-5 rounded-[2rem] font-black text-lg hover:bg-blue-600 shadow-2xl shadow-slate-900/20 active:scale-[0.98] transition-all flex justify-center items-center gap-3">
+                    <span id="btnText">Publish Event</span>
+                    <i id="btnIcon" class="fas fa-paper-plane text-sm"></i>
+                </button>
+
+            </form>
+        </div>
+    </div>
+
+
+    <script>
+        // Real-time Character Counter
+        const descInput = document.getElementById('descInput');
+        const charCount = document.getElementById('charCount');
+        
+        descInput.addEventListener('input', () => {
+            charCount.textContent = `${descInput.value.length} / 500`;
+            if (descInput.value.length >= 450) charCount.classList.add('text-orange-500');
+            else charCount.classList.remove('text-orange-500');
+        });
+
+        // Image Preview Logic
+        const imageInput = document.getElementById('imageInput');
+        const imagePreview = document.getElementById('imagePreview');
+        const uploadPlaceholder = document.getElementById('uploadPlaceholder');
+
+        imageInput.onchange = evt => {
+            const [file] = imageInput.files;
+            if (file) {
+                imagePreview.src = URL.createObjectURL(file);
+                imagePreview.classList.remove('hidden');
+                uploadPlaceholder.classList.add('opacity-0');
+            }
+        };
+
+        // Advanced Form Submit Logic
+        document.getElementById('createForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const btnIcon = document.getElementById('btnIcon');
+
+            // Interactive Loading State
+            btnText.textContent = "Verifying & Publishing...";
+            btnIcon.className = "fas fa-circle-notch fa-spin";
+            btn.classList.add('bg-blue-600', 'pointer-events-none');
+
+            const formData = new FormData(e.target);
+
+            try {
+                const res = await fetch('/api/events/create', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if(res.ok) {
+                    // Success State Animation
+                    btnText.textContent = "Event Live!";
+                    btnIcon.className = "fas fa-check-circle";
+                    btn.classList.replace('bg-blue-600', 'bg-green-500');
+                    
+                    setTimeout(() => {
+                        window.location.href = '/staff/dashboard';
+                    }, 1200);
+                } else {
+                    const data = await res.json();
+                    alert("Error: " + data.error);
+                    resetBtn();
+                }
+            } catch (err) {
+                alert("Network error. Please try again.");
+                resetBtn();
+            }
+        };
+
+        function resetBtn() {
+            const btn = document.getElementById('submitBtn');
+            document.getElementById('btnText').textContent = "Publish Event";
+            document.getElementById('btnIcon').className = "fas fa-paper-plane";
+            btn.classList.remove('bg-blue-600', 'bg-green-500', 'pointer-events-none');
+        }
+    </script>
+</body>
+</html>

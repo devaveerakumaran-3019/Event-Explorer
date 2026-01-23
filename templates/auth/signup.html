@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Registration | CIET Portal</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+                    colors: {
+                        brand: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8' },
+                        dark: { 900: '#0f172a', 800: '#1e293b', 700: '#334155' }
+                    },
+                    animation: {
+                        'blob': 'blob 10s infinite',
+                        'entrance': 'entrance 0.6s ease-out forwards'
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' }
+                        },
+                        entrance: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Tech Grid Background */
+        .bg-grid {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+        }
+        .dark .bg-grid {
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+        }
+
+        /* Glass Panel */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+        }
+        .dark .glass-panel {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Custom Date Picker Icon Color */
+        ::-webkit-calendar-picker-indicator {
+            filter: invert(0.5);
+            cursor: pointer;
+        }
+        .dark ::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+        }
+
+        /* Blob Animation */
+        .glow-blob {
+            position: absolute; width: 500px; height: 500px; border-radius: 50%;
+            filter: blur(80px); opacity: 0.4; z-index: -1;
+        }
+        .dark .glow-blob { opacity: 0.2; filter: blur(100px); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-dark-900 dark:text-slate-100 min-h-screen flex flex-col items-center justify-center relative overflow-x-hidden transition-colors duration-300 font-sans selection:bg-brand-500 selection:text-white pb-16 pt-10">
+
+    <div class="fixed inset-0 bg-grid pointer-events-none"></div>
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="glow-blob bg-blue-500 top-[-10%] left-[-10%] animate-blob"></div>
+        <div class="glow-blob bg-purple-500 bottom-[-10%] right-[-10%] animate-blob animation-delay-2000"></div>
+    </div>
+
+    <a href="/auth/login" class="absolute top-6 left-6 md:top-10 md:left-10 z-20 flex items-center gap-2 text-sm font-bold text-slate-500 dark:text-slate-400 hover:text-brand-600 dark:hover:text-white transition-colors group">
+        <div class="w-8 h-8 rounded-full bg-white dark:bg-dark-800 border border-slate-200 dark:border-dark-700 flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
+            <i class="fas fa-arrow-left text-xs"></i>
+        </div>
+        <span class="hidden md:inline">Back to Login</span>
+    </a>
+
+    <button id="theme-toggle" class="absolute top-6 right-6 md:top-10 md:right-10 z-20 w-10 h-10 rounded-full bg-white dark:bg-dark-800 border border-slate-200 dark:border-dark-700 flex items-center justify-center shadow-sm text-slate-500 dark:text-slate-400 hover:text-brand-600 transition-all">
+        <i class="fas fa-sun text-amber-500 dark:hidden"></i>
+        <i class="fas fa-moon text-blue-400 hidden dark:block"></i>
+    </button>
+
+    <div class="glass-panel w-full max-w-2xl p-6 md:p-10 rounded-3xl relative z-10 mx-4 animate-entrance mb-8">
+        
+        <div class="text-center mb-8">
+            <h2 class="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Create Staff Account</h2>
+            <div class="flex items-center justify-center gap-2 mt-2 text-slate-500 dark:text-slate-400 text-sm">
+                <i class="fas fa-shield-alt text-brand-500"></i>
+                <span>Secure Registration Portal</span>
+            </div>
+        </div>
+
+        <form id="signupForm" class="space-y-5">
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div class="space-y-1.5">
+                    <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Full Name</label>
+                    <div class="relative group">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <i class="fas fa-user-tie text-slate-400 group-focus-within:text-brand-500 transition-colors"></i>
+                        </div>
+                        <input type="text" id="name" placeholder="Dr. John Doe" required 
+                            class="w-full pl-11 pr-4 py-3 bg-slate-50/50 dark:bg-dark-800/50 border border-slate-200 dark:border-dark-700 rounded-xl outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600 font-medium">
+                    </div>
+                </div>
+
+                <div class="space-y-1.5">
+                    <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Username / ID</label>
+                    <div class="relative group">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <i class="fas fa-at text-slate-400 group-focus-within:text-brand-500 transition-colors"></i>
+                        </div>
+                        <input type="text" id="username" placeholder="johndoe123" required 
+                            class="w-full pl-11 pr-4 py-3 bg-slate-50/50 dark:bg-dark-800/50 border border-slate-200 dark:border-dark-700 rounded-xl outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600 font-medium">
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div class="space-y-1.5">
+                    <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Department</label>
+                    <div class="relative group">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <i class="fas fa-building text-slate-400 group-focus-within:text-brand-500 transition-colors"></i>
+                        </div>
+                        <select id="dept" required class="w-full pl-11 pr-4 py-3 bg-slate-50/50 dark:bg-dark-800/50 border border-slate-200 dark:border-dark-700 rounded-xl outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all appearance-none font-medium cursor-pointer text-slate-600 dark:text-slate-300">
+                            <option value="" disabled selected>Select Dept</option>
+                            <option value="CSE">Computer Science Engineering</option>
+                            <option value="ECE">Electronics & Communication</option>
+                            <option value="AIDS">Artificial Intelligence & Data Science</option>
+                            <option value="MCT">Mechatronics</option>
+                            <option value="CIVIL">Civil Engineering</option>
+                            <option value="MECH">Mechanical Engineering</option>
+                            <option value="IT">Information Technology</option>
+                            <option value="CYBER SECURITY">Cyber Security</option>
+                            <option value="VLSI">VLSI Design</option>
+                            <option value="EEE">Electrical & Electronics Engineering</option>
+                            <option value="AIML">AI & Machine Learning</option>
+                            <option value="S&H">Science & Humanities</option>
+                            <option value="MBA">MBA</option>
+                            <option value="Placement">Placement Cell</option>
+                        </select>
+                        <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none text-slate-400">
+                            <i class="fas fa-chevron-down text-xs"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-1.5">
+                    <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Date of Birth</label>
+                    <div class="relative group">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <i class="fas fa-calendar-alt text-slate-400 group-focus-within:text-brand-500 transition-colors"></i>
+                        </div>
+                        <input type="date" id="dob" required 
+                            class="w-full pl-11 pr-4 py-3 bg-slate-50/50 dark:bg-dark-800/50 border border-slate-200 dark:border-dark-700 rounded-xl outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all text-slate-600 dark:text-slate-300 font-medium">
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-4 bg-brand-50 dark:bg-blue-900/10 border border-brand-100 dark:border-brand-500/20 rounded-2xl">
+                <div class="space-y-1.5">
+                    <label class="text-xs font-bold text-brand-600 dark:text-brand-400 uppercase tracking-wider ml-1 flex items-center gap-1">
+                        <i class="fas fa-lock text-[10px]"></i> Admin Verification Code
+                    </label>
+                    <div class="relative group">
+                        <input type="text" id="code" placeholder="Enter authorization key" required 
+                            class="w-full pl-4 pr-4 py-3 bg-white dark:bg-dark-800 border border-brand-200 dark:border-brand-500/30 rounded-xl outline-none focus:ring-2 focus:ring-brand-500 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600 font-mono tracking-widest text-center font-bold">
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-1.5">
+                <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider ml-1">Password</label>
+                <div class="relative group">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <i class="fas fa-key text-slate-400 group-focus-within:text-brand-500 transition-colors"></i>
+                    </div>
+                    <input type="password" id="password" placeholder="Create a strong password" required 
+                        class="w-full pl-11 pr-12 py-3 bg-slate-50/50 dark:bg-dark-800/50 border border-slate-200 dark:border-dark-700 rounded-xl outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600 font-medium">
+                    
+                    <button type="button" id="togglePassword" class="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors cursor-pointer focus:outline-none">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <div class="flex gap-1 h-1 mt-2 px-1">
+                    <div id="strength-1" class="flex-1 rounded-full bg-slate-200 dark:bg-dark-700 transition-all duration-300"></div>
+                    <div id="strength-2" class="flex-1 rounded-full bg-slate-200 dark:bg-dark-700 transition-all duration-300"></div>
+                    <div id="strength-3" class="flex-1 rounded-full bg-slate-200 dark:bg-dark-700 transition-all duration-300"></div>
+                    <div id="strength-4" class="flex-1 rounded-full bg-slate-200 dark:bg-dark-700 transition-all duration-300"></div>
+                </div>
+            </div>
+
+            <div id="error-msg" class="hidden flex items-start gap-3 p-3 rounded-xl bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-xs font-medium border border-red-100 dark:border-red-800 animate-pulse">
+                <i class="fas fa-exclamation-circle mt-0.5"></i>
+                <span id="error-text">Registration failed.</span>
+            </div>
+
+            <button type="submit" id="submitBtn" class="w-full py-4 bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-700 hover:to-indigo-700 text-white font-bold rounded-xl shadow-lg shadow-brand-500/20 hover:shadow-brand-500/40 transition-all duration-300 hover:-translate-y-0.5 flex items-center justify-center gap-2 group">
+                <span>Create Staff Account</span>
+                <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform" id="btn-icon"></i>
+                <i id="btn-spinner" class="fas fa-spinner fa-spin hidden"></i>
+            </button>
+        </form>
+
+        <div class="mt-8 text-center pt-6 border-t border-slate-200 dark:border-slate-700/50">
+            <p class="text-sm text-slate-500 dark:text-slate-400">
+                Already have credentials? 
+                <a href="/auth/login" class="font-bold text-slate-900 dark:text-white hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Sign In</a>
+            </p>
+        </div>
+    </div>
+
+    <footer class="fixed bottom-0 w-full text-center z-20 py-4 bg-slate-50/80 dark:bg-dark-900/80 backdrop-blur-md border-t border-slate-200 dark:border-slate-800">
+        <div class="flex flex-col md:flex-row justify-center items-center gap-1 md:gap-4 text-xs font-medium text-slate-400 dark:text-slate-500">
+            <span>&copy; 2026 CIET. All rights reserved.</span>
+            <span class="hidden md:inline text-slate-300 dark:text-slate-600">|</span>
+            <span>
+                Developed by 
+                <a href="https://deva-portfolio-app.netlify.app/" target="_blank" class="text-slate-600 dark:text-slate-300 font-bold hover:text-brand-600 dark:hover:text-brand-400 hover:underline transition-all">
+                    Deva Veera Kumaran
+                </a>
+            </span>
+        </div>
+    </footer>
+
+    <script>
+        // --- THEME ---
+        const htmlEl = document.documentElement;
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            htmlEl.classList.add('dark');
+        }
+        document.getElementById('theme-toggle').addEventListener('click', () => {
+            htmlEl.classList.toggle('dark');
+            localStorage.theme = htmlEl.classList.contains('dark') ? 'dark' : 'light';
+        });
+
+        // --- PASSWORD UTILS ---
+        const passwordInput = document.querySelector('#password');
+        const togglePassword = document.querySelector('#togglePassword');
+        
+        // Toggle Visibility
+        togglePassword.addEventListener('click', function () {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.querySelector('i').classList.toggle('fa-eye');
+            this.querySelector('i').classList.toggle('fa-eye-slash');
+        });
+
+        // Strength Meter Logic
+        passwordInput.addEventListener('input', (e) => {
+            const val = e.target.value;
+            const bars = [1, 2, 3, 4].map(n => document.getElementById(`strength-${n}`));
+            let strength = 0;
+            if(val.length > 5) strength++; // length
+            if(val.match(/[A-Z]/)) strength++; // uppercase
+            if(val.match(/[0-9]/)) strength++; // number
+            if(val.match(/[^A-Za-z0-9]/)) strength++; // special
+
+            // Reset
+            bars.forEach(b => b.className = "flex-1 rounded-full bg-slate-200 dark:bg-dark-700 transition-all duration-300");
+
+            // Color Map
+            const colors = ['bg-red-500', 'bg-orange-500', 'bg-yellow-500', 'bg-green-500'];
+            
+            for(let i=0; i < strength; i++) {
+                bars[i].classList.remove('bg-slate-200', 'dark:bg-dark-700');
+                bars[i].classList.add(colors[strength-1]);
+            }
+        });
+
+        // --- SUBMISSION ---
+        document.getElementById('signupForm').onsubmit = async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const spinner = document.getElementById('btn-spinner');
+            const btnIcon = document.getElementById('btn-icon');
+            const errorContainer = document.getElementById('error-msg');
+            const errorText = document.getElementById('error-text');
+            const btnText = submitBtn.querySelector('span');
+
+            // 1. UI Loading
+            submitBtn.disabled = true;
+            btnText.textContent = "Verifying Details...";
+            spinner.classList.remove('hidden');
+            btnIcon.classList.add('hidden');
+            errorContainer.classList.add('hidden');
+            submitBtn.classList.add('opacity-90', 'cursor-not-allowed');
+
+            const payload = {
+                name: document.getElementById('name').value,
+                dept: document.getElementById('dept').value,
+                dob: document.getElementById('dob').value,
+                username: document.getElementById('username').value,
+                password: document.getElementById('password').value,
+                admin_code: document.getElementById('code').value
+            };
+
+            try {
+                // 2. API Call
+                const res = await fetch('/api/auth/signup', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(payload)
+                });
+                
+                const data = await res.json();
+
+                // 3. Success
+                if(res.ok) { 
+                    btnText.textContent = "Account Created!";
+                    spinner.classList.add('hidden');
+                    submitBtn.classList.remove('bg-gradient-to-r', 'from-brand-600', 'to-indigo-600');
+                    submitBtn.classList.add('bg-green-600', 'border-transparent');
+                    
+                    setTimeout(() => {
+                        window.location.href = '/auth/login'; 
+                    }, 1000);
+                } 
+                // 4. Error
+                else { 
+                    throw new Error(data.error || "Registration failed. Please check your admin code.");
+                }
+            } catch (err) {
+                submitBtn.disabled = false;
+                btnText.textContent = "Create Staff Account";
+                spinner.classList.add('hidden');
+                btnIcon.classList.remove('hidden');
+                submitBtn.classList.remove('opacity-90', 'cursor-not-allowed');
+                
+                errorText.textContent = err.message;
+                errorContainer.classList.remove('hidden');
+
+                // Shake Animation
+                const card = document.querySelector('.glass-panel');
+                card.animate([
+                    { transform: 'translateX(0)' },
+                    { transform: 'translateX(-6px)' },
+                    { transform: 'translateX(6px)' },
+                    { transform: 'translateX(0)' }
+                ], { duration: 400 });
+            }
+        }
+    </script>
+</body>
+</html>
