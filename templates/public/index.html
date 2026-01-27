@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Event Explorer | CIET</title>
-    
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -21,7 +21,7 @@
                     fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
                     colors: {
                         brand: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 900: '#1e3a8a' },
-                        dark: { 900: '#0f172a', 800: '#1e293b', 700: '#334155' } // Slightly bluer dark mode for modern look
+                        dark: { 900: '#0f172a', 800: '#1e293b', 700: '#334155' }
                     },
                     animation: { 'blob': 'blob 10s infinite', 'float': 'float 6s ease-in-out infinite' },
                     keyframes: {
@@ -43,8 +43,7 @@
 
     <style>
         body { -webkit-font-smoothing: antialiased; }
-        
-        /* Glassmorphism Refined */
+
         .glass {
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(12px);
@@ -56,21 +55,18 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        /* Blobs */
         .glow-blob {
             position: absolute; width: 600px; height: 600px; border-radius: 50%;
             filter: blur(100px); opacity: 0.4; z-index: -1;
         }
         .dark .glow-blob { opacity: 0.2; }
 
-        /* Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         .dark ::-webkit-scrollbar-thumb { background: #334155; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-        /* Mobile Menu Transition */
         #mobile-menu {
             transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
             max-height: 0;
@@ -82,11 +78,10 @@
             opacity: 1;
         }
 
-        /* Active Category Buttons */
         .cat-btn { transition: all 0.2s ease; }
-        .cat-btn.active { 
-            background-color: #2563eb; 
-            color: white; 
+        .cat-btn.active {
+            background-color: #2563eb;
+            color: white;
             box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
             border-color: transparent;
         }
@@ -95,419 +90,468 @@
 </head>
 <body class="bg-slate-50 text-slate-900 dark:bg-dark-900 dark:text-slate-100 transition-colors duration-300 relative overflow-x-hidden flex flex-col min-h-screen selection:bg-brand-500 selection:text-white">
 
-    <div class="fixed inset-0 overflow-hidden pointer-events-none">
-        <div class="glow-blob bg-blue-500 top-[-10%] left-[-10%] animate-blob"></div>
-        <div class="glow-blob bg-purple-500 bottom-[-10%] right-[-10%] animate-blob animation-delay-2000"></div>
-    </div>
-
-    <nav class="fixed w-full z-50 transition-all duration-300 top-0 left-0 glass" id="navbar">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <div class="flex items-center gap-3 cursor-pointer group" onclick="window.scrollTo(0,0)">
-<div class="flex items-center gap-3 group">
-    <div class="relative w-12 h-12 flex items-center justify-center bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-slate-100 dark:border-slate-700 group-hover:shadow-xl group-hover:-translate-y-0.5 transition-all duration-300 overflow-hidden">
-        <img 
-            src="/static/uploads/logo2.png"
-            alt="CIET Logo" 
-            class="w-full h-full object-contain p-1.5 transform group-hover:scale-110 transition-transform duration-500"
-        >
-        
-        <div class="absolute inset-0 bg-gradient-to-tr from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-    </div>
-
-    <div class="flex flex-col">
-        <span class="text-sm font-black tracking-tight leading-none text-slate-800 dark:text-white group-hover:text-blue-600 transition-colors">
-            CIET
-        </span>
-        <span class="text-[10px] font-black text-blue-600 dark:text-blue-400 tracking-[0.15em] uppercase mt-1">
-            Event Portal
-        </span>
-    </div>
+<div class="fixed inset-0 overflow-hidden pointer-events-none">
+    <div class="glow-blob bg-blue-500 top-[-10%] left-[-10%] animate-blob"></div>
+    <div class="glow-blob bg-purple-500 bottom-[-10%] right-[-10%] animate-blob animation-delay-2000"></div>
 </div>
-                </div>
 
-                <div class="hidden md:flex items-center gap-4">
-                    <button id="theme-toggle" class="w-10 h-10 rounded-full bg-slate-100 dark:bg-dark-800 hover:bg-slate-200 dark:hover:bg-dark-700 flex items-center justify-center transition-all focus:outline-none ring-2 ring-transparent focus:ring-brand-500 text-slate-600 dark:text-slate-400">
-                        <i class="fas fa-sun text-amber-500 dark:hidden text-lg"></i>
-                        <i class="fas fa-moon text-blue-400 hidden dark:block text-lg"></i>
-                    </button>
-                    <a href="/auth/login" class="px-6 py-2.5 text-sm font-bold text-white bg-slate-900 dark:bg-white dark:text-slate-900 rounded-full hover:bg-brand-600 dark:hover:bg-brand-100 shadow-lg shadow-brand-500/20 transition-all hover:-translate-y-0.5">
-                        Staff Login
-                    </a>
-                </div>
+<nav class="fixed w-full z-50 transition-all duration-300 top-0 left-0 glass" id="navbar">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-20">
+            <div class="flex items-center gap-3 cursor-pointer group" onclick="window.scrollTo(0,0)">
+                <div class="flex items-center gap-3 group">
+                    <div class="relative w-12 h-12 flex items-center justify-center bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-slate-100 dark:border-slate-700 group-hover:shadow-xl group-hover:-translate-y-0.5 transition-all duration-300 overflow-hidden">
+                        <img src="/static/uploads/logo2.png" alt="CIET Logo" class="w-full h-full object-contain p-1.5 transform group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-tr from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    </div>
 
-                <div class="flex items-center gap-4 md:hidden">
-                    <button id="theme-toggle-mobile" class="w-10 h-10 rounded-full bg-slate-100 dark:bg-dark-800 flex items-center justify-center text-slate-600 dark:text-slate-400">
-                        <i class="fas fa-sun text-amber-500 dark:hidden"></i>
-                        <i class="fas fa-moon text-blue-400 hidden dark:block"></i>
-                    </button>
-                    <button id="mobile-menu-btn" class="text-slate-800 dark:text-white text-2xl focus:outline-none">
-                        <i class="fas fa-bars"></i>
-                    </button>
+                    <div class="flex flex-col">
+                        <span class="text-sm font-black tracking-tight leading-none text-slate-800 dark:text-white group-hover:text-blue-600 transition-colors">CIET</span>
+                        <span class="text-[10px] font-black text-blue-600 dark:text-blue-400 tracking-[0.15em] uppercase mt-1">Event Portal</span>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div id="mobile-menu" class="bg-white dark:bg-dark-900 border-b border-slate-200 dark:border-dark-700 md:hidden">
-            <div class="px-4 py-6 space-y-4">
-                <a href="#" class="block text-slate-600 dark:text-slate-300 font-medium hover:text-brand-600">Home</a>
-                <a href="#events" class="block text-slate-600 dark:text-slate-300 font-medium hover:text-brand-600">Events</a>
-                <a href="/auth/login" class="block w-full text-center py-3 rounded-xl bg-brand-600 text-white font-bold">Staff Login</a>
+            <div class="hidden md:flex items-center gap-4">
+                <button id="theme-toggle" class="w-10 h-10 rounded-full bg-slate-100 dark:bg-dark-800 hover:bg-slate-200 dark:hover:bg-dark-700 flex items-center justify-center transition-all focus:outline-none ring-2 ring-transparent focus:ring-brand-500 text-slate-600 dark:text-slate-400">
+                    <i class="fas fa-sun text-amber-500 dark:hidden text-lg"></i>
+                    <i class="fas fa-moon text-blue-400 hidden dark:block text-lg"></i>
+                </button>
+                <a href="/auth/login" class="px-6 py-2.5 text-sm font-bold text-white bg-slate-900 dark:bg-white dark:text-slate-900 rounded-full hover:bg-brand-600 dark:hover:bg-brand-100 shadow-lg shadow-brand-500/20 transition-all hover:-translate-y-0.5">
+                    Staff Login
+                </a>
+            </div>
+
+            <div class="flex items-center gap-4 md:hidden">
+                <button id="theme-toggle-mobile" class="w-10 h-10 rounded-full bg-slate-100 dark:bg-dark-800 flex items-center justify-center text-slate-600 dark:text-slate-400">
+                    <i class="fas fa-sun text-amber-500 dark:hidden"></i>
+                    <i class="fas fa-moon text-blue-400 hidden dark:block"></i>
+                </button>
+                <button id="mobile-menu-btn" class="text-slate-800 dark:text-white text-2xl focus:outline-none">
+                    <i class="fas fa-bars"></i>
+                </button>
             </div>
         </div>
-    </nav>
+    </div>
 
-    <section class="relative pt-32 pb-16 lg:pt-48 lg:pb-32 overflow-hidden">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-            
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/60 dark:bg-dark-800/60 border border-slate-200 dark:border-dark-700 backdrop-blur-md mb-8 animate-float shadow-sm hover:shadow-md transition-shadow cursor-default">
+    <div id="mobile-menu" class="bg-white dark:bg-dark-900 border-b border-slate-200 dark:border-dark-700 md:hidden">
+        <div class="px-4 py-6 space-y-4">
+            <a href="#" class="block text-slate-600 dark:text-slate-300 font-medium hover:text-brand-600">Home</a>
+            <a href="#events" class="block text-slate-600 dark:text-slate-300 font-medium hover:text-brand-600">Events</a>
+            <a href="/auth/login" class="block w-full text-center py-3 rounded-xl bg-brand-600 text-white font-bold">Staff Login</a>
+        </div>
+    </div>
+</nav>
+
+<section class="relative pt-32 pb-16 lg:pt-48 lg:pb-32 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/60 dark:bg-dark-800/60 border border-slate-200 dark:border-dark-700 backdrop-blur-md mb-8 animate-float shadow-sm hover:shadow-md transition-shadow cursor-default">
                 <span class="flex h-2.5 w-2.5 relative">
                     <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                     <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
                 </span>
-                <span class="text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Registration Open 2026</span>
+            <span class="text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300">Registration Open 2026</span>
+        </div>
+
+        <h1 class="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight mb-8 leading-[1.15] text-slate-900 dark:text-white" data-aos="fade-up">
+            Discover Campus Life at
+            <br class="hidden sm:block">
+            <span class="bg-clip-text text-transparent bg-gradient-to-r from-brand-600 via-purple-600 to-pink-600">CIET Explorer</span>
+        </h1>
+
+        <p class="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed" data-aos="fade-up" data-aos-delay="100">
+            Your one-stop destination to find, register, and participate in the most exciting technical and cultural events happening on campus.
+        </p>
+
+        <div class="max-w-4xl mx-auto bg-white dark:bg-dark-800 rounded-2xl p-2 shadow-2xl shadow-brand-900/10 border border-slate-200 dark:border-dark-700 flex flex-col sm:flex-row gap-2 transition-all focus-within:ring-4 focus-within:ring-brand-500/10" data-aos="fade-up" data-aos-delay="200">
+            <div class="relative flex-grow group">
+                <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-brand-500 transition-colors"></i>
+                <input type="text" id="searchInput" placeholder="Search events (e.g., Python, Dance)..."
+                       class="w-full pl-12 pr-4 py-4 bg-slate-50 dark:bg-dark-900/50 border-none rounded-xl focus:ring-0 outline-none text-slate-900 dark:text-white placeholder-slate-400 transition-all font-medium">
+            </div>
+            <div class="relative sm:w-64 border-t sm:border-t-0 sm:border-l border-slate-200 dark:border-dark-700">
+                <select id="venueFilter" class="w-full pl-5 pr-10 py-4 bg-slate-50 dark:bg-dark-900/50 border-none rounded-xl focus:ring-0 outline-none text-slate-900 dark:text-white cursor-pointer appearance-none font-medium h-full">
+                    <option value="all">All Venues</option>
+                </select>
+                <i class="fas fa-chevron-down absolute right-5 top-1/2 -translate-y-1/2 text-xs text-slate-400 pointer-events-none"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="events" class="py-12 lg:py-20 relative z-10 flex-grow bg-white/30 dark:bg-dark-900/30 backdrop-blur-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <div class="flex flex-col md:flex-row md:items-center justify-between mb-12 gap-6">
+            <div>
+                <h2 class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-2">Upcoming Events</h2>
+                <div class="h-1.5 w-16 bg-brand-600 rounded-full"></div>
             </div>
 
-            <h1 class="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight mb-8 leading-[1.15] text-slate-900 dark:text-white" data-aos="fade-up">
-                Discover Campus Life at
-                <br class="hidden sm:block">
-                <span class="bg-clip-text text-transparent bg-gradient-to-r from-brand-600 via-purple-600 to-pink-600">CIET Explorer</span>
-            </h1>
-
-            <p class="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed" data-aos="fade-up" data-aos-delay="100">
-                Your one-stop destination to find, register, and participate in the most exciting technical and cultural events happening on campus.
-            </p>
-
-            <div class="max-w-4xl mx-auto bg-white dark:bg-dark-800 rounded-2xl p-2 shadow-2xl shadow-brand-900/10 border border-slate-200 dark:border-dark-700 flex flex-col sm:flex-row gap-2 transition-all focus-within:ring-4 focus-within:ring-brand-500/10" data-aos="fade-up" data-aos-delay="200">
-                <div class="relative flex-grow group">
-                    <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-brand-500 transition-colors"></i>
-                    <input type="text" id="searchInput" placeholder="Search events (e.g., Python, Dance)..." 
-                           class="w-full pl-12 pr-4 py-4 bg-slate-50 dark:bg-dark-900/50 border-none rounded-xl focus:ring-0 outline-none text-slate-900 dark:text-white placeholder-slate-400 transition-all font-medium">
-                </div>
-                <div class="relative sm:w-64 border-t sm:border-t-0 sm:border-l border-slate-200 dark:border-dark-700">
-                    <select id="venueFilter" class="w-full pl-5 pr-10 py-4 bg-slate-50 dark:bg-dark-900/50 border-none rounded-xl focus:ring-0 outline-none text-slate-900 dark:text-white cursor-pointer appearance-none font-medium h-full">
-                        <option value="all">All Venues</option>
-                    </select>
-                    <i class="fas fa-chevron-down absolute right-5 top-1/2 -translate-y-1/2 text-xs text-slate-400 pointer-events-none"></i>
+            <div class="overflow-x-auto pb-2 -mx-4 px-4 md:mx-0 md:px-0 md:pb-0 scrollbar-hide">
+                <div class="flex whitespace-nowrap gap-2 p-1.5 bg-white dark:bg-dark-800 rounded-xl border border-slate-200 dark:border-dark-700 shadow-sm" id="categoryContainer">
+                    <button class="cat-btn active px-5 py-2.5 text-sm font-bold rounded-lg" data-category="all">All</button>
+                    <button class="cat-btn px-5 py-2.5 text-sm font-medium rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-dark-700" data-category="Technical">Technical</button>
+                    <button class="cat-btn px-5 py-2.5 text-sm font-medium rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-dark-700" data-category="Non Technical">Non-Technical</button>
+                    <button class="cat-btn px-5 py-2.5 text-sm font-medium rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-dark-700" data-category="Cultural">Cultural</button>
+                    <button class="cat-btn px-5 py-2.5 text-sm font-medium rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-dark-700" data-category="Workshop">Workshop</button>
+                    <button class="cat-btn px-5 py-2.5 text-sm font-medium rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-dark-700" data-category="Others">Others</button>
                 </div>
             </div>
         </div>
-    </section>
 
-    <section id="events" class="py-12 lg:py-20 relative z-10 flex-grow bg-white/30 dark:bg-dark-900/30 backdrop-blur-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
-            <div class="flex flex-col md:flex-row md:items-center justify-between mb-12 gap-6">
-                <div>
-                    <h2 class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-2">Upcoming Events</h2>
-                    <div class="h-1.5 w-16 bg-brand-600 rounded-full"></div>
-                </div>
-                
-                <div class="overflow-x-auto pb-2 -mx-4 px-4 md:mx-0 md:px-0 md:pb-0 scrollbar-hide">
-                    <div class="flex whitespace-nowrap gap-2 p-1.5 bg-white dark:bg-dark-800 rounded-xl border border-slate-200 dark:border-dark-700 shadow-sm" id="categoryContainer">
-                        <button class="cat-btn active px-5 py-2.5 text-sm font-bold rounded-lg" data-category="all">All</button>
-                        <button class="cat-btn px-5 py-2.5 text-sm font-medium rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-dark-700" data-category="Technical">Technical</button>
-                        <button class="cat-btn px-5 py-2.5 text-sm font-medium rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-dark-700" data-category="Non Technical">Non-Technical</button>
-                        <button class="cat-btn px-5 py-2.5 text-sm font-medium rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-dark-700" data-category="Cultural">Cultural</button>
-                        <button class="cat-btn px-5 py-2.5 text-sm font-medium rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-dark-700" data-category="Workshop">Workshop</button>
-                        <button class="cat-btn px-5 py-2.5 text-sm font-medium rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-dark-700" data-category="Others">Others</button>
-                    </div>
-                </div>
+        <div id="loader" class="flex flex-col items-center justify-center py-32">
+            <div class="relative w-16 h-16">
+                <div class="absolute inset-0 border-4 border-slate-200 dark:border-dark-700 rounded-full"></div>
+                <div class="absolute inset-0 border-4 border-brand-600 rounded-full border-t-transparent animate-spin"></div>
             </div>
+            <p class="mt-6 text-slate-500 dark:text-slate-400 font-medium animate-pulse">Loading experiences...</p>
+        </div>
 
-            <div id="loader" class="flex flex-col items-center justify-center py-32">
-                <div class="relative w-16 h-16">
-                    <div class="absolute inset-0 border-4 border-slate-200 dark:border-dark-700 rounded-full"></div>
-                    <div class="absolute inset-0 border-4 border-brand-600 rounded-full border-t-transparent animate-spin"></div>
-                </div>
-                <p class="mt-6 text-slate-500 dark:text-slate-400 font-medium animate-pulse">Loading experiences...</p>
+        <div id="events-container" class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 hidden">
+        </div>
+
+        <div id="no-events" class="hidden text-center py-32 bg-white dark:bg-dark-800 rounded-3xl border border-dashed border-slate-300 dark:border-dark-700 mx-auto max-w-2xl">
+            <div class="w-16 h-16 bg-slate-100 dark:bg-dark-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-search text-slate-400 text-xl"></i>
             </div>
+            <h3 class="text-xl font-bold text-slate-900 dark:text-white">No Events Found</h3>
+            <p class="text-slate-500 dark:text-slate-400 mt-2 max-w-xs mx-auto">We couldn't find any events matching your search filters.</p>
+            <button onclick="resetFilters()" class="mt-6 text-brand-600 font-bold hover:underline">Clear all filters</button>
+        </div>
+    </div>
+</section>
 
-            <div id="events-container" class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 hidden">
+<footer class="bg-white dark:bg-dark-900 border-t border-slate-200 dark:border-dark-700 pt-16 pb-8 relative z-10 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+            <div class="col-span-1 md:col-span-2">
+                <div class="flex items-center gap-2 mb-6">
+                    <div class="w-8 h-8 bg-brand-600 rounded-lg flex items-center justify-center text-white font-bold shadow-lg shadow-brand-500/30">C</div>
+                    <span class="text-xl font-bold text-slate-900 dark:text-white tracking-tight">CIET Explorer</span>
                 </div>
-            
-            <div id="no-events" class="hidden text-center py-32 bg-white dark:bg-dark-800 rounded-3xl border border-dashed border-slate-300 dark:border-dark-700 mx-auto max-w-2xl">
-                <div class="w-16 h-16 bg-slate-100 dark:bg-dark-700 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-search text-slate-400 text-xl"></i>
-                </div>
-                <h3 class="text-xl font-bold text-slate-900 dark:text-white">No Events Found</h3>
-                <p class="text-slate-500 dark:text-slate-400 mt-2 max-w-xs mx-auto">We couldn't find any events matching your search filters.</p>
-                <button onclick="resetFilters()" class="mt-6 text-brand-600 font-bold hover:underline">Clear all filters</button>
+                <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed max-w-md">
+                    The official student event portal of Coimbatore Institute of Engineering and Technology. Designed to bridge the gap between students and campus activities.
+                </p>
+            </div>
+            <div>
+                <h4 class="font-bold text-slate-900 dark:text-white mb-6 text-sm uppercase tracking-widest">Navigation</h4>
+                <ul class="space-y-3 text-sm text-slate-500 dark:text-slate-400">
+                    <li><a href="#" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Home</a></li>
+                    <li><a href="#events" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Upcoming Events</a></li>
+                    <li><a href="/auth/login" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Staff Login</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold text-slate-900 dark:text-white mb-6 text-sm uppercase tracking-widest">Connect</h4>
+                <ul class="space-y-3 text-sm text-slate-500 dark:text-slate-400">
+                    <li class="flex items-start gap-3">
+                        <i class="fas fa-map-marker-alt mt-1 text-brand-500"></i>
+                        <span>Narasipuram Road, Coimbatore, Tamil Nadu</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <i class="fas fa-phone text-brand-500"></i>
+                        <span>+91 422 297 0131</span>
+                    </li>
+                </ul>
             </div>
         </div>
-    </section>
 
-    <footer class="bg-white dark:bg-dark-900 border-t border-slate-200 dark:border-dark-700 pt-16 pb-8 relative z-10 mt-auto">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
-                <div class="col-span-1 md:col-span-2">
-                    <div class="flex items-center gap-2 mb-6">
-                        <div class="w-8 h-8 bg-brand-600 rounded-lg flex items-center justify-center text-white font-bold shadow-lg shadow-brand-500/30">C</div>
-                        <span class="text-xl font-bold text-slate-900 dark:text-white tracking-tight">CIET Explorer</span>
-                    </div>
-                    <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed max-w-md">
-                        The official student event portal of Coimbatore Institute of Engineering and Technology. Designed to bridge the gap between students and campus activities.
-                    </p>
-                </div>
-                <div>
-                    <h4 class="font-bold text-slate-900 dark:text-white mb-6 text-sm uppercase tracking-widest">Navigation</h4>
-                    <ul class="space-y-3 text-sm text-slate-500 dark:text-slate-400">
-                        <li><a href="#" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Home</a></li>
-                        <li><a href="#events" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Upcoming Events</a></li>
-                        <li><a href="/auth/login" class="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Staff Login</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-bold text-slate-900 dark:text-white mb-6 text-sm uppercase tracking-widest">Connect</h4>
-                    <ul class="space-y-3 text-sm text-slate-500 dark:text-slate-400">
-                        <li class="flex items-start gap-3">
-                            <i class="fas fa-map-marker-alt mt-1 text-brand-500"></i>
-                            <span>Narasipuram Road, Coimbatore, Tamil Nadu</span>
-                        </li>
-                        <li class="flex items-center gap-3">
-                            <i class="fas fa-phone text-brand-500"></i>
-                            <span>+91 422 297 0131</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="border-t border-slate-200 dark:border-dark-700 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-500 dark:text-slate-500">
-                <span>&copy; 2026 CIET. All rights reserved.</span>
-                <span>
-                    Developed by 
+        <div class="border-t border-slate-200 dark:border-dark-700 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-500 dark:text-slate-500">
+            <span>&copy; 2026 CIET. All rights reserved.</span>
+            <span>
+                    Developed by
                     <a href="https://deva-portfolio-app.netlify.app/" target="_blank" class="text-slate-900 dark:text-white font-bold hover:text-brand-600 transition-colors ml-1">
                         Deva Veera Kumaran
                     </a>
                 </span>
-            </div>
         </div>
-    </footer>
+    </div>
+</footer>
 
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-        // Init Animation
-        AOS.init({ once: true, offset: 50, duration: 800, easing: 'ease-out-cubic' });
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    // Init Animation
+    AOS.init({ once: true, offset: 50, duration: 800, easing: 'ease-out-cubic' });
 
-        // Variables
-        let allEvents = [];
-        let activeCategory = 'all';
+    // Variables
+    let allEvents = [];
+    let activeCategory = 'all';
 
-        const container = document.getElementById('events-container');
-        const loader = document.getElementById('loader');
-        const noEvents = document.getElementById('no-events');
-        const searchInput = document.getElementById('searchInput');
-        const venueFilter = document.getElementById('venueFilter');
-        const catBtns = document.querySelectorAll('.cat-btn');
+    const container = document.getElementById('events-container');
+    const loader = document.getElementById('loader');
+    const noEvents = document.getElementById('no-events');
+    const searchInput = document.getElementById('searchInput');
+    const venueFilter = document.getElementById('venueFilter');
+    const catBtns = document.querySelectorAll('.cat-btn');
 
-        // Dark Mode Logic
-        const themeBtns = [document.getElementById('theme-toggle'), document.getElementById('theme-toggle-mobile')];
-        const htmlEl = document.documentElement;
-        
-        function updateTheme() {
-            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                htmlEl.classList.add('dark');
-            } else {
-                htmlEl.classList.remove('dark');
-            }
+    // Dark Mode Logic
+    const themeBtns = [document.getElementById('theme-toggle'), document.getElementById('theme-toggle-mobile')];
+    const htmlEl = document.documentElement;
+
+    function updateTheme() {
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            htmlEl.classList.add('dark');
+        } else {
+            htmlEl.classList.remove('dark');
         }
-        updateTheme();
+    }
+    updateTheme();
 
-        themeBtns.forEach(btn => {
-            if(!btn) return;
-            btn.addEventListener('click', () => {
-                htmlEl.classList.toggle('dark');
-                localStorage.theme = htmlEl.classList.contains('dark') ? 'dark' : 'light';
+    themeBtns.forEach(btn => {
+        if(!btn) return;
+        btn.addEventListener('click', () => {
+            htmlEl.classList.toggle('dark');
+            localStorage.theme = htmlEl.classList.contains('dark') ? 'dark' : 'light';
+        });
+    });
+
+    // Mobile Menu Logic
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    mobileMenuBtn.addEventListener('click', () => {
+        const isOpen = mobileMenu.classList.contains('open');
+        if(isOpen) {
+            mobileMenu.classList.remove('open');
+            mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+        } else {
+            mobileMenu.classList.add('open');
+            mobileMenuBtn.innerHTML = '<i class="fas fa-times"></i>';
+        }
+    });
+
+    // --- FETCH LOGIC ---
+    document.addEventListener('DOMContentLoaded', async () => {
+        try {
+            // Fetch from Backend API
+            const response = await fetch('/api/events');
+            if(!response.ok) throw new Error("API Error");
+            const rawEvents = await response.json();
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            allEvents = rawEvents.filter(event => {
+                const eventDate = new Date(event.date);
+                return eventDate >= today;
             });
+
+            allEvents.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            populateVenues(allEvents);
+            loader.classList.add('hidden');
+            filterAndRender();
+
+        } catch (error) {
+            console.error("Fetch Error:", error);
+            // Fallback UI
+            loader.innerHTML = `<div class="text-center"><p class="text-red-500 font-bold mb-2">Connection Failed</p><p class="text-sm text-slate-500">Could not reach the server.</p></div>`;
+        }
+    });
+
+    function resetFilters() {
+        searchInput.value = '';
+        venueFilter.value = 'all';
+        activeCategory = 'all';
+        catBtns.forEach(b => {
+            b.classList.remove('active');
+            b.classList.add('text-slate-500', 'dark:text-slate-400');
+            if(b.dataset.category === 'all') {
+                b.classList.add('active');
+                b.classList.remove('text-slate-500', 'dark:text-slate-400');
+            }
+        });
+        filterAndRender();
+    }
+
+    function filterAndRender() {
+        const query = searchInput.value.toLowerCase();
+        const venue = venueFilter.value;
+
+        const filtered = allEvents.filter(event => {
+            const matchesSearch = (event.title || '').toLowerCase().includes(query) ||
+                                  (event.description || '').toLowerCase().includes(query);
+            const matchesCategory = activeCategory === 'all' || event.category === activeCategory;
+            const matchesVenue = venue === 'all' || event.venue === venue;
+
+            return matchesSearch && matchesCategory && matchesVenue;
         });
 
-        // Mobile Menu Logic
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        
-        mobileMenuBtn.addEventListener('click', () => {
-            const isOpen = mobileMenu.classList.contains('open');
-            if(isOpen) {
-                mobileMenu.classList.remove('open');
-                mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+        if(filtered.length === 0) {
+            container.classList.add('hidden');
+            noEvents.classList.remove('hidden');
+        } else {
+            noEvents.classList.add('hidden');
+            container.classList.remove('hidden');
+            renderCards(filtered);
+        }
+    }
+
+    // --- CORE FUNCTION: Render Cards with Max Capacity Logic ---
+   function renderCards(events) {
+        console.log("Rendering Events:", events); // Debugging: Check console to see your data
+
+        container.innerHTML = events.map((event, index) => {
+            const dateObj = new Date(event.date);
+            const month = dateObj.toLocaleString('default', { month: 'short' });
+            const day = dateObj.getDate();
+            const time = event.time || "TBA";
+
+            // Handle ID
+            const eventId = event._id || event.id;
+
+            // Image Logic
+            let imageUrl = event.image;
+            if (!imageUrl) {
+                imageUrl = 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&w=800&q=80';
+            } else if (!imageUrl.startsWith('http')) {
+                imageUrl = `/static/uploads/${imageUrl}`;
+            }
+
+            // --- CAPACITY LOGIC START ---
+
+            // 1. Get Registration Count
+            const regCount = event.registrations_count !== undefined
+                             ? event.registrations_count
+                             : (event.registrations ? event.registrations.length : 0);
+
+            // 2. Get Max Capacity (With Fallback for old events)
+            // If max_capacity is missing or 0, we default to 100 so the UI shows up.
+            let rawCap = event.max_capacity ? parseInt(event.max_capacity) : 0;
+            const maxCap = rawCap > 0 ? rawCap : 100;
+
+            // 3. Calculate Percentage
+            let isFull = false;
+            let capacityText = `${regCount}/${maxCap} Filled`;
+            let percentage = Math.min(100, Math.round((regCount / maxCap) * 100));
+
+            if (regCount >= maxCap) {
+                isFull = true;
+                capacityText = "Sold Out";
+                percentage = 100;
+            }
+            // --- CAPACITY LOGIC END ---
+
+            // Button Logic
+            let actionButton;
+            if (isFull) {
+                actionButton = `
+                    <button disabled class="flex-1 inline-flex items-center justify-center py-2.5 rounded-xl bg-gray-100 dark:bg-dark-700 text-gray-400 font-bold text-sm cursor-not-allowed border border-gray-200 dark:border-dark-600">
+                        Full
+                        <i class="fas fa-lock ml-2"></i>
+                    </button>
+                `;
             } else {
-                mobileMenu.classList.add('open');
-                mobileMenuBtn.innerHTML = '<i class="fas fa-times"></i>';
+                actionButton = `
+                    <a href="/event/register?id=${eventId}" class="flex-1 inline-flex items-center justify-center py-2.5 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold text-sm hover:bg-brand-600 dark:hover:bg-brand-400 dark:hover:text-white transition-all shadow-lg shadow-slate-900/20 group-hover:shadow-brand-500/30">
+                        Register
+                        <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                    </a>
+                `;
             }
+
+            const currentBaseUrl = window.location.origin;
+            const eventLink = `${currentBaseUrl}/event/register?id=${eventId}`;
+            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(`Check out ${event.title}! ${eventLink}`)}`;
+            const delay = index * 100;
+
+            return `
+            <div class="group relative bg-white dark:bg-dark-800 rounded-3xl overflow-hidden border border-slate-100 dark:border-dark-700 hover:border-brand-200 dark:hover:border-brand-800 transition-all duration-300 flex flex-col h-full shadow-lg shadow-slate-200/50 dark:shadow-none hover:shadow-2xl hover:-translate-y-1" data-aos="fade-up" data-aos-delay="${delay}">
+
+                <div class="relative h-48 sm:h-56 overflow-hidden">
+                    <div class="absolute inset-0 bg-slate-200 dark:bg-dark-700 animate-pulse"></div>
+                    <img src="${imageUrl}"
+                         class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 ${isFull ? 'grayscale filter brightness-75' : ''}"
+                         alt="${event.title}"
+                         onload="this.previousElementSibling.remove()"
+                         onerror="this.src='https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=800&q=80'">
+
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80"></div>
+
+                    <div class="absolute top-4 right-4">
+                        <span class="bg-white/95 dark:bg-dark-900/95 backdrop-blur px-3 py-1.5 rounded-lg text-[10px] font-bold text-slate-900 dark:text-white uppercase tracking-wider shadow-sm border border-slate-100 dark:border-dark-600 flex items-center gap-1.5">
+                            <span class="w-1.5 h-1.5 rounded-full ${isFull ? 'bg-red-500' : 'bg-brand-500'}"></span>
+                            ${event.category || 'Event'}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="p-6 flex-1 flex flex-col relative">
+                    <div class="absolute -top-10 left-6 bg-white dark:bg-dark-800 rounded-2xl p-2.5 text-center shadow-xl border border-slate-100 dark:border-dark-600 min-w-[70px]">
+                        <div class="text-[10px] font-bold text-red-500 uppercase tracking-widest">${month}</div>
+                        <div class="text-2xl font-black text-slate-800 dark:text-white leading-none mt-0.5">${day}</div>
+                    </div>
+
+                    <div class="mt-4 flex items-center justify-between text-xs font-bold text-slate-500 dark:text-slate-400 mb-3">
+                         <div class="flex items-center gap-1.5">
+                            <i class="far fa-clock text-brand-500"></i> ${time}
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <i class="fas fa-map-marker-alt text-red-500"></i> ${event.venue || 'Campus'}
+                        </div>
+                    </div>
+
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2 leading-tight group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">
+                        ${event.title}
+                    </h3>
+
+                    <div class="mb-4">
+                        <div class="flex justify-between text-[10px] font-bold uppercase tracking-wide mb-1.5">
+                            <span class="${isFull ? 'text-red-500' : 'text-slate-500'}">
+                                <i class="fas fa-user-friends mr-1"></i> ${capacityText}
+                            </span>
+                            <span class="text-brand-600">${percentage}%</span>
+                        </div>
+                        <div class="w-full h-1.5 bg-slate-100 dark:bg-dark-700 rounded-full overflow-hidden">
+                            <div class="h-full ${isFull ? 'bg-red-500' : 'bg-brand-500'} transition-all duration-1000" style="width: ${percentage}%"></div>
+                        </div>
+                    </div>
+
+                    <p class="text-slate-600 dark:text-slate-400 text-sm line-clamp-2 mb-6 flex-1 leading-relaxed">
+                        ${event.description}
+                    </p>
+
+                    <div class="flex gap-3 mt-auto pt-4 border-t border-slate-100 dark:border-dark-700">
+                        <a href="${whatsappUrl}" target="_blank" class="w-11 h-11 flex-shrink-0 flex items-center justify-center rounded-xl bg-green-50 dark:bg-dark-700 text-green-600 hover:bg-green-500 hover:text-white transition-all duration-300 border border-transparent hover:border-green-600">
+                            <i class="fab fa-whatsapp text-lg"></i>
+                        </a>
+                        ${actionButton}
+                    </div>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    function populateVenues(events) {
+        const venues = [...new Set(events.map(e => e.venue).filter(v => v))];
+        venues.sort().forEach(v => {
+            const opt = document.createElement('option');
+            opt.value = v;
+            opt.textContent = v;
+            venueFilter.appendChild(opt);
         });
+    }
 
-        // --- FETCH LOGIC ---
-        document.addEventListener('DOMContentLoaded', async () => {
-            try {
-                // Simulating fetch for demo purposes - replace with your actual fetch
-                const response = await fetch('/api/events');
-                if(!response.ok) throw new Error("API Error");
-                const rawEvents = await response.json();
-                
-                const today = new Date();
-                today.setHours(0, 0, 0, 0); 
+    searchInput.addEventListener('input', filterAndRender);
+    venueFilter.addEventListener('change', filterAndRender);
 
-                allEvents = rawEvents.filter(event => {
-                    const eventDate = new Date(event.date);
-                    return eventDate >= today; 
-                });
-
-                allEvents.sort((a, b) => new Date(a.date) - new Date(b.date));
-
-                populateVenues(allEvents);
-                loader.classList.add('hidden');
-                filterAndRender();
-
-            } catch (error) {
-                console.error("Fetch Error:", error);
-                // Fallback for visual testing if API fails (Optional: Remove in production)
-                loader.innerHTML = `<div class="text-center"><p class="text-red-500 font-bold mb-2">Connection Failed</p><p class="text-sm text-slate-500">Could not reach the server.</p></div>`;
-            }
-        });
-
-        function resetFilters() {
-            searchInput.value = '';
-            venueFilter.value = 'all';
-            activeCategory = 'all';
+    catBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            activeCategory = e.target.dataset.category;
             catBtns.forEach(b => {
-                b.classList.remove('active');
-                b.classList.add('text-slate-500', 'dark:text-slate-400');
-                if(b.dataset.category === 'all') {
+                if (b.dataset.category === activeCategory) {
                     b.classList.add('active');
-                    b.classList.remove('text-slate-500', 'dark:text-slate-400');
+                    b.classList.remove('text-slate-500', 'dark:text-slate-400', 'hover:bg-slate-50');
+                } else {
+                    b.classList.remove('active');
+                    b.classList.add('text-slate-500', 'dark:text-slate-400', 'hover:bg-slate-50');
                 }
             });
             filterAndRender();
-        }
-
-        function filterAndRender() {
-            const query = searchInput.value.toLowerCase();
-            const venue = venueFilter.value;
-
-            const filtered = allEvents.filter(event => {
-                const matchesSearch = (event.title || '').toLowerCase().includes(query) || 
-                                      (event.description || '').toLowerCase().includes(query);
-                const matchesCategory = activeCategory === 'all' || event.category === activeCategory;
-                const matchesVenue = venue === 'all' || event.venue === venue;
-
-                return matchesSearch && matchesCategory && matchesVenue;
-            });
-
-            if(filtered.length === 0) {
-                container.classList.add('hidden');
-                noEvents.classList.remove('hidden');
-            } else {
-                noEvents.classList.add('hidden');
-                container.classList.remove('hidden');
-                renderCards(filtered);
-            }
-        }
-
-        function renderCards(events) {
-            container.innerHTML = events.map((event, index) => {
-                const dateObj = new Date(event.date);
-                const month = dateObj.toLocaleString('default', { month: 'short' });
-                const day = dateObj.getDate();
-                const time = event.time || "TBA"; 
-                
-                const imageUrl = event.image ? `/static/uploads/${event.image}` : `https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&w=800&q=80`;
-                const regCount = event.registered_count !== undefined ? event.registered_count : 0;
-
-                const currentBaseUrl = window.location.origin;
-                const eventLink = `${currentBaseUrl}/event/register?id=${event.id}`;
-                const shareText = `Hey! Check out this event: ${event.title} at CIET.\nRegister here: ${eventLink}`;
-                const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
-
-                // Stagger animation delay
-                const delay = index * 100;
-
-                return `
-                <div class="group relative bg-white dark:bg-dark-800 rounded-3xl overflow-hidden border border-slate-100 dark:border-dark-700 hover:border-brand-200 dark:hover:border-brand-800 transition-all duration-300 flex flex-col h-full shadow-lg shadow-slate-200/50 dark:shadow-none hover:shadow-2xl hover:-translate-y-1" data-aos="fade-up" data-aos-delay="${delay}">
-                    
-                    <div class="relative h-48 sm:h-56 overflow-hidden">
-                        <div class="absolute inset-0 bg-slate-200 dark:bg-dark-700 animate-pulse"></div>
-                        <img src="${imageUrl}" 
-                             class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
-                             alt="${event.title}"
-                             onload="this.previousElementSibling.remove()"
-                             onerror="this.src='https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=800&q=80'">
-                        
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60"></div>
-
-                        <div class="absolute top-4 right-4">
-                            <span class="bg-white/95 dark:bg-dark-900/95 backdrop-blur px-3 py-1.5 rounded-lg text-[10px] font-bold text-slate-900 dark:text-white uppercase tracking-wider shadow-sm border border-slate-100 dark:border-dark-600 flex items-center gap-1.5">
-                                <span class="w-1.5 h-1.5 rounded-full bg-brand-500"></span>
-                                ${event.category || 'General'}
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="p-6 flex-1 flex flex-col relative">
-                        <div class="absolute -top-10 left-6 bg-white dark:bg-dark-800 rounded-2xl p-2.5 text-center shadow-lg border border-slate-100 dark:border-dark-600 min-w-[70px]">
-                            <div class="text-[10px] font-bold text-red-500 uppercase tracking-widest">${month}</div>
-                            <div class="text-2xl font-black text-slate-800 dark:text-white leading-none mt-0.5">${day}</div>
-                        </div>
-
-                        <div class="mt-4 flex items-center justify-end text-xs font-bold text-slate-500 dark:text-slate-400 mb-3 space-x-3">
-                            <div class="flex items-center gap-1.5">
-                                <i class="far fa-clock text-brand-500"></i> ${time}
-                            </div>
-                            <div class="flex items-center gap-1.5 text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-900/20 px-2 py-0.5 rounded-md">
-                                <i class="fas fa-fire-alt"></i> ${regCount}
-                            </div>
-                        </div>
-
-                        <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2 leading-tight group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">
-                            ${event.title}
-                        </h3>
-                        
-                        <p class="text-slate-600 dark:text-slate-400 text-sm line-clamp-2 mb-6 flex-1 leading-relaxed">
-                            ${event.description}
-                        </p>
-                        
-                        <div class="flex gap-3 mt-auto pt-4 border-t border-slate-100 dark:border-dark-700">
-                            <a href="${whatsappUrl}" target="_blank" class="w-11 h-11 flex-shrink-0 flex items-center justify-center rounded-xl bg-slate-50 dark:bg-dark-700 text-green-600 dark:text-green-400 hover:bg-green-500 hover:text-white transition-all duration-300" title="Share on WhatsApp">
-                                <i class="fab fa-whatsapp text-lg"></i>
-                            </a>
-                            
-                            <a href="/event/register?id=${event.id}" class="flex-1 inline-flex items-center justify-center py-2.5 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold text-sm hover:bg-brand-600 dark:hover:bg-brand-400 dark:hover:text-white transition-all shadow-lg shadow-slate-900/20">
-                                Register Now
-                                <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>`;
-            }).join('');
-        }
-
-        function populateVenues(events) {
-            const venues = [...new Set(events.map(e => e.venue).filter(v => v))];
-            venues.sort().forEach(v => {
-                const opt = document.createElement('option');
-                opt.value = v;
-                opt.textContent = v;
-                venueFilter.appendChild(opt);
-            });
-        }
-
-        searchInput.addEventListener('input', filterAndRender);
-        venueFilter.addEventListener('change', filterAndRender);
-        
-        catBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                activeCategory = e.target.dataset.category;
-                catBtns.forEach(b => {
-                    if (b.dataset.category === activeCategory) {
-                        b.classList.add('active');
-                        b.classList.remove('text-slate-500', 'dark:text-slate-400', 'hover:bg-slate-50');
-                    } else {
-                        b.classList.remove('active');
-                        b.classList.add('text-slate-500', 'dark:text-slate-400', 'hover:bg-slate-50');
-                    }
-                });
-                filterAndRender();
-            });
         });
-    </script>
+    });
+</script>
 </body>
 </html>
