@@ -339,6 +339,51 @@ async function deleteEvent(eventId) {
     function logout() { fetch('/api/auth/logout').then(() => window.location.href = '/auth/login'); }
 
     loadDashboard();
+
+    async function downloadQr() {
+    const qrImage = document.getElementById('qr-image');
+    const imgUrl = qrImage.src;
+    const title = document.getElementById('qr-event-title').innerText;
+
+    // 1. Change button text to show it's working
+    const btn = document.querySelector('button[onclick="downloadQr()"]');
+    const originalText = btn.innerText;
+    btn.innerText = "Downloading...";
+    btn.disabled = true;
+
+    try {
+        // 2. Fetch the image as binary data (Blob)
+        // This is required to force a download from a different URL
+        const response = await fetch(imgUrl);
+        const blob = await response.blob();
+
+        // 3. Create a temporary invisible link to trigger the download
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+
+        // 4. Set the filename (e.g., "python_workshop_qr.png")
+        const safeTitle = title.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+        a.download = `${safeTitle}_qr.png`;
+
+        // 5. Click the link programmatically
+        document.body.appendChild(a);
+        a.click();
+
+        // 6. Clean up
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+
+    } catch (error) {
+        console.error('Download failed:', error);
+        alert('Download failed. You can right-click the image and select "Save Image As".');
+    } finally {
+        // Reset button
+        btn.innerText = originalText;
+        btn.disabled = false;
+    }
+}
 </script>
 </body>
 </html>
